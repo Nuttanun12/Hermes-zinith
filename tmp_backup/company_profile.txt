@@ -1,0 +1,305 @@
+--- slide1.xml ---
+บริษัท เฮอร์มีส 
+ซีนิท
+ จำกัด
+HERMES ZENITH CO.,LTD.
+
+--- slide2.xml ---
+HERMES ZENITH CO.,LTD.
+HERMES Supply Products & Services in
+Hydrocarbon Processing Industry
+Power Generation
+Pulp and paper
+Steel Mill.
+PRODUCTS List
+Filter – Oil Filter – Air Filter
+Filtration System		
+Air Breather 	
+Automatic Grease System	
+View & Drain
+Level Gauge	
+		 
+  	
+บริษัท เฮอร์มิส 
+ซีนิท
+ จํากัด จําหน่ายสินค้าและบริการ ด้าน 
+Filter 
+ครบวงจร เรามีนโยบายมุ่งเน้นสินค้าที่มีคุณภาพ เพื่อช่วยให้ลูกค้าลดต้นทุน รับประกัน คุณภาพสินค้าทุกชิ้น รวมไปถึงการให้บริการที่รวดเร็ว แม่นยํา มีประสิทธิภาพใน
+การทํางาน
+ ด้วยทีมงานที่มากด้วยประสบการณ์ และ มืออาชีพ
+เราจัดจําหน่ายสินค้าในระบบ
+ป๊ม
+ลม 
+Air Compressor 
+อะไหล่สิ้นเปลืองต่างๆ 
+Air Filter,
+ 
+Oil Filter , Oil Separator, Air Breather , Desiccant Breather
+เราจําหน่ายใส
+้ก
+รองที่มีจุดเด่นเรื่องคุณภาพ และราคาที่ประหยัด สามารถกรองฝุ่นละออง ขนาดเล็ก กรองไอน้ำมันและสิ่งสกปรกได้เป็นอย่างดี มีการรับประกันสินค้าตามอายุการ ใช้งานในระบบปั๊มลม นอกจากนั้นแล้วยังมีให้บริการใส
+้ก
+รองในรูปแบบต่างๆรวมทั้งงาน ซ่อม และ งานสั่ง
+ทํา
+ไส้กรองตามแบบที่ลูกค้าต้องการได้
+ 
+
+--- slide3.xml ---
+Our customers
+
+--- slide4.xml ---
+	
+Process Rotating Equipment 
+มีความสำคัญต่อกระบวนการผลิตเป็นอย่างมาก อุปกรณ์เหล่านี้ต้องการการหล่อลื่นที่มีประสิทธิภาพ คุณภาพสารหล่อลื่นดี การจ่ายสารหล่อลื่นมีความแม่นยำ และตรงเวลา เพื่อให้อุปกรณ์ 
+Process
+ 
+Rotating
+ 
+Equipment 
+ทำงานอย่างต่อเนื่องและมีประสิทธิภาพ
+สูงสุด
+	บริษัทชั้นนำพิจารณาเลือกใช้ผลิตภัณฑ์เพื่อปรับปรุงและพัฒนาวิธีการทำงาน มีเป้าหมายเพิ่มประสิทธิภาพการทำงานของ 
+Process Rotating Equipment
+ คือ
+เพิ่ม
+ Reliability 
+ของ 
+Plant 
+และ 
+Equipment, 
+ลด 
+MTBR - 
+เพิ่ม 
+MTBF
+ยืดอายุการใช้งาน 
+Process Rotating Equipment
+เพิ่ม 
+Productivity
+ประหยัดค่าใช้จ่าย 
+สินค้าสำหรับ
+Process Rotating Equipment
+
+--- slide5.xml ---
+Desiccant Breather
+ 
+จะช่วยป้องกันสารปนเปื้อน ฝุ่นละอองและความชื้นเข้าไปในอุปกรณ์หรือถังน้ำมันของเครื่องจักร เมื่อติดตั้งที่อุปกรณ์เม็ด 
+silica gel 
+จะทำหน้าที่ดูดซับความชื้น พร้อมแผ่นกรองฝุ่นละอองขนาดเล็กกว่า 
+3 
+ไมครอน ช่วยยืดอายุน้ำมัน ลดความเสียหายของเครื่องจักรและลดค่าใช้จ่ายในการซ่อมบำรุง
+BREATHER
+Air Filter Breather (
+กรองอากาศ
+)
+ 
+กรองอากาศทำหน้าที่ปกป้องถังเก็บน้ำมันไฮดรอ
+ลิกแ
+ละอุปกรณ์อื่นๆ จากฝุ่นละอองที่จะเข้าไปในระบบไฮดรอ
+ลิค
+ มีขนาดเกลียว 1/8” ถึง 2 1/2
+
+--- slide6.xml ---
+AIR BREATHER INSTALLATION
+
+--- slide8.xml ---
+ยืดอายุการใช้งานลูกปืนที่หล่อลื่นด้วยจาระบี  ด้วยโปรแกรมคำนวณ 
+MQL (Minimum Quantity Lubrication) 
+สำหรับควบคุมปริมาณและระยะเวลาในการเติมอย่างแม่นยำ
+ลดปัญหาลูกปืนเสียหายจากสิ่งปนเปื้อนภายนอก, แรงดันในการเติมหรือใช้จาระบีผิดประเภท
+ช่วยให้การทำ 
+Patrol 
+มีประสิทธิภาพและรวดเร็วมากยิ่งขึ้นด้วย 
+RFID 
+และ 
+PMS Ver.3 Software
+M
+inimum 
+Q
+uantity 
+L
+ubrication
+The Right 
+Volume,
+ At The Right  
+Interval
+AUTOMATIC GREASE SYSTEM
+
+--- slide9.xml ---
+AUTOMATIC GREASE SYSTEM INSTALLATION
+
+--- slide10.xml ---
+SPECTRUM OIL CONTAINER - TRICO
+
+--- slide11.xml ---
+SPECTRUM OIL CONTAINER - TRICO
+
+--- slide12.xml ---
+SPECTRUM OIL CONTAINER - TRICO
+
+--- slide13.xml ---
+SPECTRUM OIL CONTAINER - TRICO
+
+--- slide14.xml ---
+NEW
+ARRIVAL
+ANTI-SPILL
+PALLET 
+SAFETY WORK PLACE
+SAVE COST
+ZERO WASTE
+ENVIRONMENT FRIENDLY
+“การควบคุมการปนเปื้อนของน้ำมันตั้งแต่เริ่มต้น”
+ 
+Storage 
+– 
+จัดเก็บแบบ 
+Smart 
+ด้วย 
+Color coded 
+และเพิ่มพื้นที่ใช้สอย
+Transfer 
+– 
+เติมน้ำมันด้วยความแม่นยำ ป้องกันน้ำมันหกด้วย
+ twist spouts
+ และสิ่งสกปรกจากภายนอก
+Identification – 
+ช่วยขจัดปัญหาเติมน้ำมันผิดประเภท ด้วย
+ Color Coded Smart Tag
+FLAMABLE CABINET & ANTI-SPILL PALLET
+
+--- slide15.xml ---
+FILTRATION CART UNIT
+
+--- slide16.xml ---
+OIL FILTER
+AIR FILTER
+OIL SEPARATER
+WATER FILTER
+AIR-INLET FILTER
+ALL KIND OF FILTER
+
+--- slide17.xml ---
+OIL FILTER
+
+--- slide18.xml ---
+AIR FILTER
+
+--- slide19.xml ---
+BAG FILTER
+ถุงกรอง (
+Bag Filter) 
+คืออุปกรณ์หลักในระบบดักจับฝุ่น (
+Dust Collector) 
+และกรองของเหลวอุตสาหกรรม โดยใช้หลักการกรองผ่านถุงผ้าหรือวัสดุสังเคราะห์ เพื่อแยกอนุภาคของแข็งออกจากแก๊สหรือของเหลว เหมาะสำหรับการกรองความละเอียดสูง ทนความร้อนและสารเคมีได้ดี ช่วยลดฝุ่นละอองก่อนปล่อยออกสู่ชั้นบรรยากาศ 
+คุณสมบัติหลักและการทำงาน
+:
+การกรองอากาศ
+/
+ฝุ่น
+:
+ 
+ดักจับฝุ่นขนาดเล็กในอุตสาหกรรมปูนซีเมนต์
+, 
+เตาเผา
+, 
+อาหารสัตว์
+, 
+และโรงพ่นสี
+การกรองของเหลว
+:
+ 
+ใช้ในอุตสาหกรรมปิโตรเคมี
+, 
+สี
+, 
+อาหารและเครื่องดื่ม
+, 
+และบำบัดน้ำเสีย โดยใช้คู่กับ
+ 
+ถังกรอง 
+(Bag Filter Housing)
+วัสดุที่ใช้
+:
+ 
+มีหลายประเภท เช่น 
+Polyester (PE) 
+ทนทาน
+, Polypropylene (PP) 
+ราคาประหยัด
+, Nomex 
+ทนความร้อนสูง
+, 
+และ 
+PTFE 
+ทนสารเคมี
+โครงสร้าง
+:
+ 
+ประกอบด้วยถุงกรอง
+, 
+โครงตะแกรง 
+(Cage) 
+เพื่อยึดถุง
+, 
+และระบบทำความสะอาด 
+(Pulse Jet)
+
+--- slide20.xml ---
+WATER FILTER
+
+--- slide21.xml ---
+SPARE PART FOR AIR COMPRESSOR
+Air Filter
+Oil Filter
+Oil Separator
+
+--- slide22.xml ---
+Repair and spare parts replacement
+
+--- slide23.xml ---
+Cleaning Starting and Checking 
+
+--- slide24.xml ---
+MADE TO ORDER FILTERS
+Air Filter
+Oil Filter
+Oil Separator
+
+--- slide25.xml ---
+CLEANER BIO3
+Biodegradable Product 
+Design for use with Oil Mist Lubrication system cleaning
+      component that deposit from LSO100 
+Lubrimist
+ Synthetic Oil
+Remove varnish deposit on the top layer during manual cleaning
+Does not contained CFC
+Non-flammable
+Non-volatile
+Volume  5L , 20L
+DIRECTIONS
+Mix with water 1:8 ( BIO 3 : Water) and soak all 
+      varnish component and oily surface for 30 minutes
+Gently wipe or brush contamination off
+Allow 3-5 minutes for heavy deposits
+Increase dilution volume by water as application conditions
+CAUTIONS
+Skin irritation may occur after long contact
+If spilled or splashed wash with excessive water
+If swallowed: drink a lot of clean water or milk and consult physician if necessary
+
+--- slide26.xml ---
+INSTRUMENT PRODUCTS
+
+--- slide27.xml ---
+Thank You For Your Attention
+389/157 Moo.6, 
+Phrakesa
+ Subdistrict, Mueang Samut Prakan District, Samut Prakan 10280 TH
+T.061-426-2362, 097-964-9987
+Email: 
+sale@hermes-zenith.com
+          
+hermeszenith9@gmail.com
+  
+
