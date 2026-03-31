@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "services": "Services",
+    "contact": "Contact Us",
+    "admin": "Admin"
+  },
+  "home": {
+    "hero": {
+      "title": "Hermes-Zenith",
+      "subtitle": "Premium Industrial Solutions & Equipment",
+      "cta": "Explore Products"
+    },
+    "features": {
+      "title": "Our Expertise",
+      "desc": "Delivering high-quality industrial components, from Air Compressors to specialized Filtration Systems."
+    },
+    "about_section": {
+      "title": "About Us",
+      "desc": "Hermes-Zenith is a leading provider of premium industrial solutions for process rotating equipment. We specialize in lubrication systems, filtration technologies, and contamination control products that increase plant reliability, extend equipment lifespan, and reduce maintenance costs.",
+      "mission_title": "Our Mission",
+      "mission": "To deliver cutting-edge industrial solutions that maximize equipment uptime, optimize maintenance efficiency, and drive operational excellence for our valued clients.",
+      "vision_title": "Our Vision",
+      "vision": "To be the most trusted partner in industrial process equipment solutions across Southeast Asia.",
+      "learn_more": "Learn More About Us"
+    },
+    "products_section": {
+      "title": "Our Products",
+      "desc": "We offer a comprehensive range of industrial products designed to protect, maintain, and enhance the performance of your critical equipment.",
+      "breather_title": "Desiccant & Air Breathers",
+      "breather_desc": "Protect your equipment from moisture, dust and contaminants with advanced breather technology filtering particles down to 3 microns.",
+      "grease_title": "Automatic Grease Systems",
+      "grease_desc": "MQL (Minimum Quantity Lubrication) systems with RFID tracking for precise, automated bearing lubrication at the right volume and interval.",
+      "container_title": "Spectrum Oil Containers",
+      "container_desc": "Color-coded smart storage and transfer solutions that eliminate cross-contamination and wrong oil type application.",
+      "filter_title": "Industrial Filters",
+      "filter_desc": "Complete range of oil filters, air filters, bag filters, water filters, and oil separators for all industrial applications.",
+      "view_all": "View All Products"
+    },
+    "contact_section": {
+      "title": "Contact Us",
+      "desc": "Ready to optimize your industrial equipment performance? Get in touch with our team of experts.",
+      "address_label": "Address",
+      "address": "389/157 Moo.6, Phrakesa Subdistrict, Mueang Samut Prakan District, Samut Prakan 10280 TH",
+      "phone_label": "Phone",
+      "phone": "061-426-2362, 097-964-9987",
+      "email_label": "Email",
+      "email_1": "sale@hermes-zenith.com",
+      "email_2": "hermeszenith9@gmail.com",
+      "send_message": "Send Us a Message",
+      "name_placeholder": "Your Name",
+      "email_placeholder": "Your Email",
+      "message_placeholder": "Your Message",
+      "submit": "Send Message"
+    }
+  },
+  "about": {
+    "title": "About Hermes-Zenith",
+    "content": "Hermes-Zenith provides state-of-the-art industrial products, focusing on process rotating equipment. We aim to increase productivity, reduce maintenance costs, and extend equipment lifespans.",
+    "hero_title": "Industrial Excellence Since 2026",
+    "hero_desc": "Hermes-Zenith is dedicated to delivering high-performance industrial solutions that ensure operational reliability and efficiency for our partners worldwide.",
+    "story_title": "Our Journey",
+    "story_content": "Founded with a vision to revolutionize industrial maintenance, Hermes-Zenith has grown into a trusted leader in process rotating equipment. We combine technical expertise with innovative products to solve complex industrial challenges.",
+    "stats": {
+      "experience": "Years of Experience",
+      "reliability": "Reliability Focus",
+      "partners": "Global Partners"
+    },
+    "values": {
+      "title": "Our Core Values",
+      "integrity": "Integrity First",
+      "innovation": "Continuous Innovation",
+      "quality": "Uncompromising Quality"
+    }
+  },
+  "products": {
+    "title": "Our Products",
+    "view_details": "View Details",
+    "no_products": "No products available.",
+    "categories": {
+      "all": "All Categories",
+      "air_compressor": "Air Compressors",
+      "filters": "Filtration Systems",
+      "lubrication": "Lubrication Solutions",
+      "storage": "Storage & Handling"
+    },
+    "search_placeholder": "Search for products...",
+    "category_label": "Category",
+    "filter_all": "All",
+    "hero_title": "Industrial Solutions Catalog",
+    "hero_subtitle": "Explore our comprehensive range of high-performance rotating equipment and spare parts."
+  },
+  "services": {
+    "title": "Industrial Services",
+    "hero_subtitle": "Expert maintenance, repair, and optimization for your critical industrial infrastructure.",
+    "repair": {
+      "title": "Repair & Parts Replacement",
+      "desc": "Our factory-trained technicians provide comprehensive repair services and genuine spare parts replacement to ensure your equipment returns to peak performance.",
+      "benefit1": "Reduced equipment downtime",
+      "benefit2": "Original manufacturer parts",
+      "benefit3": "Extended asset lifespan"
+    },
+    "cleaning": {
+      "title": "Cleaning & Commissioning",
+      "desc": "Thorough maintenance protocols including deep cleaning, safety checks, and professional starting procedures to guarantee smooth operational transitions.",
+      "benefit1": "Optimal starting safety",
+      "benefit2": "Contamination removal",
+      "benefit3": "Performance verification"
+    },
+    "process": {
+      "title": "Our Service Process",
+      "step1_title": "Analysis",
+      "step1_desc": "Comprehensive inspection and root cause analysis of equipment issues.",
+      "step2_title": "Solution",
+      "step2_desc": "Proposing the most efficient repair or maintenance strategy for your needs.",
+      "step3_title": "Execution",
+      "step3_desc": "Professional implementation by our certified technical team.",
+      "step4_title": "Support",
+      "step4_desc": "Ongoing monitoring and maintenance advice to prevent future issues."
+    }
+  },
+  "admin": {
+    "login": "Admin Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign In",
+    "dashboard": "Admin Dashboard",
+    "add_product": "Add New Product",
+    "edit_product": "Edit Product",
+    "delete": "Delete",
+    "save": "Save Changes",
+    "logout": "Logout",
+    "product_name": "Product Name",
+    "description": "Description",
+    "category": "Category",
+    "image_url": "Image URL"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "products": "我们的产品",
+    "services": "服务",
+    "contact": "联系我们",
+    "admin": "管理员"
+  },
+  "home": {
+    "hero": {
+      "title": "Hermes-Zenith",
+      "subtitle": "优质的工业解决方案与设备",
+      "cta": "探索产品"
+    },
+    "features": {
+      "title": "我们的专长",
+      "desc": "提供高质量的工业零件，从空气压缩机到专业的过滤系统。"
+    },
+    "about_section": {
+      "title": "关于我们",
+      "desc": "Hermes-Zenith 是工艺旋转设备优质工业解决方案的领先供应商。我们专注于润滑系统、过滤技术和污染控制产品，以提高工厂可靠性、延长设备使用寿命并降低维护成本。",
+      "mission_title": "我们的使命",
+      "mission": "提供尖端的工业解决方案，最大限度地延长设备正常运行时间，优化维护效率，并为客户推动卓越运营。",
+      "vision_title": "我们的愿景",
+      "vision": "成为东南亚最值得信赖的工业流程设备解决方案合作伙伴。",
+      "learn_more": "了解更多关于我们"
+    },
+    "products_section": {
+      "title": "我们的产品",
+      "desc": "我们提供全面的工业产品，旨在保护、维护和提升关键设备的性能。",
+      "breather_title": "干燥剂及空气呼吸器",
+      "breather_desc": "通过先进的呼吸器技术保护设备免受湿气、灰尘和污染物的侵害，可过滤小至3微米的颗粒。",
+      "grease_title": "自动润滑系统",
+      "grease_desc": "MQL（最小量润滑）系统，配备RFID追踪功能，以精确的量和间隔进行自动轴承润滑。",
+      "container_title": "Spectrum 油品容器",
+      "container_desc": "色彩编码的智能存储和转移解决方案，消除交叉污染和误用油品类型的问题。",
+      "filter_title": "工业过滤器",
+      "filter_desc": "全系列油过滤器、空气过滤器、袋式过滤器、水过滤器和油分离器，适用于所有工业应用。",
+      "view_all": "查看所有产品"
+    },
+    "contact_section": {
+      "title": "联系我们",
+      "desc": "准备好优化您的工业设备性能了吗？请联系我们的专家团队。",
+      "address_label": "地址",
+      "address": "389/157 Moo.6, Phrakesa Subdistrict, Mueang Samut Prakan District, Samut Prakan 10280 TH",
+      "phone_label": "电话",
+      "phone": "061-426-2362, 097-964-9987",
+      "email_label": "电邮",
+      "email_1": "sale@hermes-zenith.com",
+      "email_2": "hermeszenith9@gmail.com",
+      "send_message": "给我们留言",
+      "name_placeholder": "您的姓名",
+      "email_placeholder": "您的电邮",
+      "message_placeholder": "您的留言",
+      "submit": "发送消息"
+    }
+  },
+  "about": {
+    "title": "关于 Hermes-Zenith",
+    "content": "Hermes-Zenith提供最先进的工业产品，专注于工艺旋转设备。我们的目标是提高生产力，降低维护成本并延长设备使用寿命。",
+    "hero_title": "卓越工业 始于 2026",
+    "hero_desc": "Hermes-Zenith 致力于提供高性能的工业解决方案，确保为全球合作伙伴提供运营可靠性和效率。",
+    "story_title": "我们的历程",
+    "story_content": "Hermes-Zenith 的愿景是彻底改变工业维护，现已成长为工艺旋转设备领域值得信赖的领导者。我们将技术专业知识与创新产品相结合，解决复杂的工业挑战。",
+    "stats": {
+      "experience": "多年经验",
+      "reliability": "专注于可靠性",
+      "partners": "全球合作伙伴"
+    },
+    "values": {
+      "title": "我们的核心价值观",
+      "integrity": "诚信至上",
+      "innovation": "持续创新",
+      "quality": "不妥协的质量"
+    }
+  },
+  "products": {
+    "title": "我们的产品",
+    "view_details": "查看详情",
+    "no_products": "暂无产品。",
+    "categories": {
+      "all": "所有类别",
+      "air_compressor": "空气压缩机",
+      "filters": "过滤系统",
+      "lubrication": "润滑解决方案",
+      "storage": "存储与搬运"
+    },
+    "search_placeholder": "搜索产品...",
+    "category_label": "类别",
+    "filter_all": "全部",
+    "hero_title": "工业解决方案目录",
+    "hero_subtitle": "探索我们全面的高性能旋转设备和备件系列。"
+  },
+  "services": {
+    "title": "工业服务",
+    "hero_subtitle": "为您的关键工业基础设施提供专业的维护、维修和优化。",
+    "repair": {
+      "title": "维修与零件更换",
+      "desc": "我们经过工厂培训的技术人员提供全面的维修服务和正品备件更换，确保您的设备恢复到最佳性能。",
+      "benefit1": "减少设备停机时间",
+      "benefit2": "原厂零件保证",
+      "benefit3": "延长资产寿命"
+    },
+    "cleaning": {
+      "title": "清洁与调试",
+      "desc": "彻底的维护协议，包括深度清洁、安全检查和专业启动程序，以保证平稳的运营过渡。",
+      "benefit1": "最佳启动安全性",
+      "benefit2": "去除污染物",
+      "benefit3": "性能验证"
+    },
+    "process": {
+      "title": "我们的服务流程",
+      "step1_title": "分析",
+      "step1_desc": "对设备问题进行全面检查和根本原因分析。",
+      "step2_title": "解决方案",
+      "step2_desc": "根据您的需求提出最有效的维修或维护策略。",
+      "step3_title": "执行",
+      "step3_desc": "由我们认证的技术团队进行专业实施。",
+      "step4_title": "支持",
+      "step4_desc": "持续监控和维护建议，以防止未来出现问题。"
+    }
+  },
+  "admin": {
+    "login": "管理员登录",
+    "email": "电邮",
+    "password": "密码",
+    "submit": "登录",
+    "dashboard": "管理仪表板",
+    "add_product": "添加新产品",
+    "edit_product": "编辑产品",
+    "delete": "删除",
+    "save": "保存更改",
+    "logout": "登出",
+    "product_name": "产品名称",
+    "description": "描述",
+    "category": "类别",
+    "image_url": "图片链接"
+  }
+}

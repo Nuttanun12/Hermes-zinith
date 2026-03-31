@@ -1,0 +1,50 @@
+import Link from 'next/link'
+import { getDictionary } from '@/get-dictionary'
+import { type Locale } from '@/i18n-config'
+import LanguageSwitcher from './LanguageSwitcher'
+import { Hexagon } from 'lucide-react'
+
+export async function Navbar({ lang }: { lang: Locale }) {
+  const dict = await getDictionary(lang)
+
+  return (
+    <header className="sticky top-0 z-50 w-full bg-white shadow-sm transition-all duration-300">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <Link href={`/${lang}`} className="flex items-center space-x-2">
+          <Hexagon className="h-8 w-8 text-primary" fill="currentColor" />
+          <span className="font-bold text-xl tracking-tight text-foreground uppercase">
+            Hermes-Zenith
+          </span>
+        </Link>
+
+        <nav className="hidden md:flex gap-6 items-center">
+          <Link
+            href={`/${lang}/about`}
+            className="text-sm font-medium text-foreground hover:text-primary transition-colors uppercase tracking-wide"
+          >
+            {dict.nav.about}
+          </Link>
+          <Link
+            href={`/${lang}/products`}
+            className="text-sm font-medium text-foreground hover:text-primary transition-colors uppercase tracking-wide"
+          >
+            {dict.nav.products}
+          </Link>
+          <Link
+            href={`/${lang}/services`}
+            className="text-sm font-medium text-foreground hover:text-primary transition-colors uppercase tracking-wide"
+          >
+            {dict.nav.services}
+          </Link>
+          <LanguageSwitcher currentLocale={lang} />
+          <Link
+            href={`/${lang}/contact`}
+            className="hidden sm:inline-flex items-center justify-center px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-md transition-colors"
+          >
+            {dict.nav.contact}
+          </Link>
+        </nav>
+      </div>
+    </header>
+  )
+}
