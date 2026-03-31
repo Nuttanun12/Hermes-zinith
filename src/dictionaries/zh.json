@@ -9,13 +9,17 @@
   },
   "home": {
     "hero": {
+      "badge": "优质的工业解决方案",
       "title": "Hermes-Zenith",
       "subtitle": "优质的工业解决方案与设备",
       "cta": "探索产品"
     },
     "features": {
       "title": "我们的专长",
-      "desc": "提供高质量的工业零件，从空气压缩机到专业的过滤系统。"
+      "desc": "提供高质量的工业零件，从空气压缩机到专业的过滤系统。",
+      "air_compressor_desc": "先进的压缩机及相关配件确保最佳运行时间。",
+      "filtration_desc": "先进的过滤和 MQL 自动润滑系统，保护资产。",
+      "services_desc": "专业人士提供全面的维修、清洁、启动和检查服务。"
     },
     "about_section": {
       "title": "关于我们",
@@ -42,6 +46,7 @@
     "contact_section": {
       "title": "联系我们",
       "desc": "准备好优化您的工业设备性能了吗？请联系我们的专家团队。",
+      "quick_inquiry": "快速咨询",
       "address_label": "地址",
       "address": "389/157 Moo.6, Phrakesa Subdistrict, Mueang Samut Prakan District, Samut Prakan 10280 TH",
       "phone_label": "电话",
@@ -50,6 +55,9 @@
       "email_1": "sale@hermes-zenith.com",
       "email_2": "hermeszenith9@gmail.com",
       "send_message": "给我们留言",
+      "name_label": "全名",
+      "email_label_field": "电子邮箱",
+      "message_label_field": "我们能为您提供什么帮助？",
       "name_placeholder": "您的姓名",
       "email_placeholder": "您的电邮",
       "message_placeholder": "您的留言",
@@ -71,14 +79,28 @@
     "values": {
       "title": "我们的核心价值观",
       "integrity": "诚信至上",
+      "integrity_desc": "每笔交易都诚信透明。",
       "innovation": "持续创新",
-      "quality": "不妥协的质量"
-    }
+      "innovation_desc": "不断发展最新的工业技术。",
+      "quality": "不妥协的质量",
+      "quality_desc": "符合全球设备性能标准。"
+    },
+    "cta_title": "准备好优化您的设备了吗？",
+    "cta_button": "立即联系"
   },
   "products": {
     "title": "我们的产品",
     "view_details": "查看详情",
     "no_products": "暂无产品。",
+    "no_products_found": "未找到相关产品",
+    "try_adjusting": "请尝试调整您的搜索或筛选条件。",
+    "back_to_products": "返回产品列表",
+    "no_image": "无图片",
+    "industrial": "工业",
+    "specification": "产品规格",
+    "interested": "对该产品感兴趣？",
+    "get_quote": "今天就获取报价。",
+    "send_inquiry": "发送咨询",
     "categories": {
       "all": "所有类别",
       "air_compressor": "空气压缩机",
@@ -119,7 +141,19 @@
       "step3_desc": "由我们认证的技术团队进行专业实施。",
       "step4_title": "支持",
       "step4_desc": "持续监控和维护建议，以防止未来出现问题。"
-    }
+    },
+    "cta_title": "需要定制工业解决方案吗？",
+    "cta_desc": "我们的技术团队已准备好分析您的设备需求并提供专业的优化服务。",
+    "cta_button": "立即开始"
+  },
+  "contact": {
+    "title_main": "联系我们"
+  },
+  "footer": {
+    "quick_links": "快速链接",
+    "contact_us": "联系我们",
+    "rights_reserved": "保留所有权利。",
+    "inquiries": "咨询"
   },
   "admin": {
     "login": "管理员登录",
@@ -135,6 +169,25 @@
     "product_name": "产品名称",
     "description": "描述",
     "category": "类别",
-    "image_url": "图片链接"
+    "image_url": "图片链接",
+    "image": "图像",
+    "title_en": "标题 (EN)",
+    "actions": "操作",
+    "no_img": "无图",
+    "edit": "编辑",
+    "delete_product": "删除产品",
+    "delete_confirm_msg": "您确定要删除该产品吗？此操作无法撤销。",
+    "confirm_delete": "确认删除",
+    "keep_product": "保留产品",
+    "saving": "保存中...",
+    "select_category": "选择类别",
+    "product_image": "产品图片",
+    "current_image": "已上传的当前图片。留空以保持原有图片。",
+    "error_deleting": "删除产品时出错",
+    "error_uploading": "上传图片出错！",
+    "error_updating": "更新出错",
+    "error_inserting": "插入出错",
+    "cancel": "取消",
+    "confirm": "确认"
   }
 }

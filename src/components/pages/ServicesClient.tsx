@@ -2,8 +2,8 @@
 
 import { motion, Variants } from 'framer-motion'
 import { Wrench, Zap, CheckCircle2, ArrowRight, ShieldCheck, Settings, Activity, Hexagon } from 'lucide-react'
-import { PageHero } from './ui/PageHero'
-import { SectionHeader } from './ui/SectionHeader'
+import { PageHero } from '@/components/ui/PageHero'
+import { SectionHeader } from '@/components/ui/SectionHeader'
 
 export default function ServicesClient({ dict }: { dict: any }) {
   const containerVariants: Variants = {
@@ -162,16 +162,16 @@ export default function ServicesClient({ dict }: { dict: any }) {
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
             <div className="relative z-10 max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-8 uppercase tracking-tight">
-                Need a custom industrial solution?
+                {dict.services.cta_title}
               </h2>
               <p className="text-primary-light text-lg mb-12 opacity-90 italic">
-                Our technical team is ready to analyze your equipment needs and provide professional optimization services.
+                {dict.services.cta_desc}
               </p>
               <a 
                 href="#contact" 
                 className="inline-flex items-center px-16 py-6 bg-white text-primary font-bold rounded-full hover:bg-gray-100 transition-all duration-300 group shadow-xl uppercase tracking-widest text-sm"
               >
-                Get Started
+                {dict.services.cta_button}
                 <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </a>
             </div>

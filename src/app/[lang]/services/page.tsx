@@ -1,6 +1,6 @@
 import { getDictionary } from '@/get-dictionary'
 import { Locale } from '@/i18n-config'
-import ServicesClient from '@/components/ServicesClient'
+import ServicesClient from '@/components/pages/ServicesClient'
 
 export default async function ServicesPage({
   params,

@@ -2,8 +2,8 @@
 
 import { motion, Variants } from 'framer-motion'
 import { Landmark, ShieldCheck, Users, Briefcase, Award, TrendingUp, Factory, Hexagon } from 'lucide-react'
-import { PageHero } from './ui/PageHero'
-import { SectionHeader } from './ui/SectionHeader'
+import { PageHero } from '@/components/ui/PageHero'
+import { SectionHeader } from '@/components/ui/SectionHeader'
 
 export default function AboutClient({ dict }: { dict: any }) {
   const containerVariants: Variants = {
@@ -32,9 +32,9 @@ export default function AboutClient({ dict }: { dict: any }) {
   ]
 
   const coreValues = [
-    { label: dict.about.values.integrity, icon: Landmark, desc: 'Honesty and transparency in every transaction.' },
-    { label: dict.about.values.innovation, icon: TrendingUp, desc: 'Constantly evolving with the latest industrial tech.' },
-    { label: dict.about.values.quality, icon: Award, desc: 'Meeting global standards for equipment performance.' },
+    { label: dict.about.values.integrity, icon: Landmark, desc: dict.about.values.integrity_desc },
+    { label: dict.about.values.innovation, icon: TrendingUp, desc: dict.about.values.innovation_desc },
+    { label: dict.about.values.quality, icon: Award, desc: dict.about.values.quality_desc },
   ]
 
   return (
@@ -140,13 +140,13 @@ export default function AboutClient({ dict }: { dict: any }) {
           <div className="absolute top-0 right-0 w-1/2 h-full bg-black/5 -skew-x-12 translate-x-1/2" />
           <div className="container mx-auto px-4 relative z-10 text-center">
              <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 uppercase tracking-tight">
-                Ready to optimize your equipment?
+                {dict.about.cta_title}
              </h2>
              <a 
                href="#contact" 
                className="inline-flex items-center px-12 py-5 bg-white text-primary font-bold rounded-full hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl uppercase tracking-widest text-sm"
              >
-                Get in touch now
+                {dict.about.cta_button}
              </a>
           </div>
        </section>

@@ -1,7 +1,7 @@
 import { getDictionary } from '@/get-dictionary'
 import { Locale } from '@/i18n-config'
 import { createClient } from '@/lib/supabase/server'
-import AdminListClient from '@/components/AdminListClient'
+import AdminListClient from '@/components/features/admin/AdminListClient'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 

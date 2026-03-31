@@ -1,6 +1,6 @@
 import { getDictionary } from '@/get-dictionary'
 import { Locale } from '@/i18n-config'
-import HomeClient from '@/components/HomeClient'
+import HomeClient from '@/components/pages/HomeClient'
 
 export default async function Page({
   params,

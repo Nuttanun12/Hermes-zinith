@@ -9,13 +9,17 @@
   },
   "home": {
     "hero": {
+      "badge": "Premium Industrial Solutions",
       "title": "Hermes-Zenith",
       "subtitle": "Premium Industrial Solutions & Equipment",
       "cta": "Explore Products"
     },
     "features": {
       "title": "Our Expertise",
-      "desc": "Delivering high-quality industrial components, from Air Compressors to specialized Filtration Systems."
+      "desc": "Delivering high-quality industrial components, from Air Compressors to specialized Filtration Systems.",
+      "air_compressor_desc": "State-of-the-art compressors and related spare parts ensuring optimal runtime.",
+      "filtration_desc": "Advanced filtration and MQL Automatic Grease Systems for asset protection.",
+      "services_desc": "Comprehensive repair, cleaning, starting, and checking services by professionals."
     },
     "about_section": {
       "title": "About Us",
@@ -42,6 +46,7 @@
     "contact_section": {
       "title": "Contact Us",
       "desc": "Ready to optimize your industrial equipment performance? Get in touch with our team of experts.",
+      "quick_inquiry": "Quick Inquiry",
       "address_label": "Address",
       "address": "389/157 Moo.6, Phrakesa Subdistrict, Mueang Samut Prakan District, Samut Prakan 10280 TH",
       "phone_label": "Phone",
@@ -50,6 +55,9 @@
       "email_1": "sale@hermes-zenith.com",
       "email_2": "hermeszenith9@gmail.com",
       "send_message": "Send Us a Message",
+      "name_label": "Full Name",
+      "email_label_field": "Email Address",
+      "message_label_field": "How can we help you?",
       "name_placeholder": "Your Name",
       "email_placeholder": "Your Email",
       "message_placeholder": "Your Message",
@@ -71,14 +79,28 @@
     "values": {
       "title": "Our Core Values",
       "integrity": "Integrity First",
+      "integrity_desc": "Honesty and transparency in every transaction.",
       "innovation": "Continuous Innovation",
-      "quality": "Uncompromising Quality"
-    }
+      "innovation_desc": "Constantly evolving with the latest industrial tech.",
+      "quality": "Uncompromising Quality",
+      "quality_desc": "Meeting global standards for equipment performance."
+    },
+    "cta_title": "Ready to optimize your equipment?",
+    "cta_button": "Get in touch now"
   },
   "products": {
     "title": "Our Products",
     "view_details": "View Details",
     "no_products": "No products available.",
+    "no_products_found": "No products found",
+    "try_adjusting": "Try adjusting your search or filters.",
+    "back_to_products": "Back to Products",
+    "no_image": "No Image",
+    "industrial": "Industrial",
+    "specification": "Product Specification",
+    "interested": "Interested in this product?",
+    "get_quote": "Get a quote today.",
+    "send_inquiry": "Send Inquiry",
     "categories": {
       "all": "All Categories",
       "air_compressor": "Air Compressors",
@@ -119,7 +141,19 @@
       "step3_desc": "Professional implementation by our certified technical team.",
       "step4_title": "Support",
       "step4_desc": "Ongoing monitoring and maintenance advice to prevent future issues."
-    }
+    },
+    "cta_title": "Need a custom industrial solution?",
+    "cta_desc": "Our technical team is ready to analyze your equipment needs and provide professional optimization services.",
+    "cta_button": "Get Started"
+  },
+  "contact": {
+    "title_main": "Get In Touch"
+  },
+  "footer": {
+    "quick_links": "Quick Links",
+    "contact_us": "Contact Us",
+    "rights_reserved": "All rights reserved.",
+    "inquiries": "Inquiries"
   },
   "admin": {
     "login": "Admin Login",
@@ -135,6 +169,25 @@
     "product_name": "Product Name",
     "description": "Description",
     "category": "Category",
-    "image_url": "Image URL"
+    "image_url": "Image URL",
+    "image": "Image",
+    "title_en": "Title (EN)",
+    "actions": "Actions",
+    "no_img": "No img",
+    "edit": "Edit",
+    "delete_product": "Delete Product",
+    "delete_confirm_msg": "Are you sure you want to delete this product? This action cannot be undone.",
+    "confirm_delete": "Confirm Delete",
+    "keep_product": "Keep Product",
+    "saving": "Saving...",
+    "select_category": "Select Category",
+    "product_image": "Product Image",
+    "current_image": "Current image uploaded. Leave empty to keep it.",
+    "error_deleting": "Error deleting product",
+    "error_uploading": "Error uploading image!",
+    "error_updating": "Error updating",
+    "error_inserting": "Error inserting",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   }
 }

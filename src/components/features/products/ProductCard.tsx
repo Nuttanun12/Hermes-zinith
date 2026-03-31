@@ -1,4 +1,5 @@
 import { Package } from 'lucide-react'
+import Link from 'next/link'
 
 export function ProductCard({
   product,
@@ -50,9 +51,12 @@ export function ProductCard({
         <p className="text-gray-500 text-sm mb-8 grow line-clamp-3 leading-relaxed">
           {desc}
         </p>
-        <button className="mt-auto px-6 py-3 bg-white border-2 border-primary/20 text-primary hover:bg-primary hover:text-white hover:border-primary font-bold rounded-xl transition-all duration-300 text-xs w-full uppercase tracking-widest shadow-xs group-hover:shadow-md active:scale-95">
+        <Link
+          href={`/${lang}/bar/${product.id}`}
+          className="mt-auto px-6 py-3 bg-white border-2 border-primary/20 text-primary hover:bg-primary hover:text-white hover:border-primary font-bold rounded-xl transition-all duration-300 text-xs w-full uppercase tracking-widest shadow-xs group-hover:shadow-md active:scale-95 text-center inline-block"
+        >
           {dict.products.view_details}
-        </button>
+        </Link>
       </div>
     </div>
   )

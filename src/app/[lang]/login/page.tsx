@@ -1,6 +1,6 @@
 import { getDictionary } from '@/get-dictionary'
 import { Locale } from '@/i18n-config'
-import LoginClient from '@/components/LoginClient'
+import LoginClient from '@/components/features/auth/LoginClient'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 

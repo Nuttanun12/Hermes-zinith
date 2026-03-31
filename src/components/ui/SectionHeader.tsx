@@ -9,9 +9,10 @@ interface SectionHeaderProps {
   label?: string
   icon?: React.ReactNode
   centered?: boolean
+  dark?: boolean
 }
 
-export function SectionHeader({ title, subtitle, label, icon, centered = true }: SectionHeaderProps) {
+export function SectionHeader({ title, subtitle, label, icon, centered = true, dark = false }: SectionHeaderProps) {
   return (
     <motion.div
       className={`${centered ? 'text-center max-w-3xl mx-auto' : 'text-left'} mb-16`}
@@ -33,13 +34,13 @@ export function SectionHeader({ title, subtitle, label, icon, centered = true }:
         ) : (
            <Hexagon className="w-12 h-12 text-primary" fill="none" />
         )}
-        <h2 className="text-3xl md:text-5xl font-bold text-foreground uppercase tracking-tight">
+        <h2 className={`text-3xl md:text-5xl font-bold uppercase tracking-tight ${dark ? 'text-white' : 'text-foreground'}`}>
           {title}
         </h2>
       </div>
       <div className={`w-24 h-1 bg-primary ${centered ? 'mx-auto' : ''} mb-6`} />
       {subtitle && (
-        <p className="text-lg text-gray-600 leading-relaxed">
+        <p className={`text-lg leading-relaxed ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
           {subtitle}
         </p>
       )}

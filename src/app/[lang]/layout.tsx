@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google'
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
+import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
 import { i18n, type Locale } from '@/i18n-config'
 import '../globals.css'
 
@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Hermes-Zenith | Premium Industrial Solutions',
   description:
     'Hermes-Zenith provides state-of-the-art industrial products, focusing on process rotating equipment. We aim to increase productivity, reduce maintenance costs, and extend equipment lifespans.',
+  icons: {
+    icon: '/logo.svg',
+  },
 }
 
 export async function generateStaticParams() {

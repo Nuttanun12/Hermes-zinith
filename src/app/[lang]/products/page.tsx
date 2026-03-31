@@ -1,7 +1,7 @@
 import { getDictionary } from '@/get-dictionary'
 import { Locale } from '@/i18n-config'
 import { createClient } from '@/lib/supabase/server'
-import ProductsClient from '@/components/ProductsClient'
+import ProductsClient from '@/components/features/products/ProductsClient'
 import { PageHero } from '@/components/ui/PageHero'
 import { Package } from 'lucide-react'
 
@@ -14,10 +14,12 @@ export default async function ProductsPage({
   const dict = await getDictionary(resolvedParams.lang as Locale)
   
   const supabase = await createClient()
-  const { data: products, error } = await supabase
-    .from('products')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const [{ data: products, error: productError }, { data: categories, error: categoryError }] = await Promise.all([
+    supabase.from('products').select('*').order('created_at', { ascending: false }),
+    supabase.from('categories').select('*').order('name_en')
+  ])
+
+  const error = productError || categoryError
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -37,6 +39,7 @@ export default async function ProductsPage({
         ) : (
           <ProductsClient 
             products={products || []} 
+            initialCategories={categories || []}
             dict={dict} 
             lang={resolvedParams.lang} 
           />

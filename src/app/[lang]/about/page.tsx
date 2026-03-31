@@ -1,6 +1,6 @@
 import { getDictionary } from '@/get-dictionary'
 import { Locale } from '@/i18n-config'
-import AboutClient from '@/components/AboutClient'
+import AboutClient from '@/components/pages/AboutClient'
 
 export default async function AboutPage({
   params,

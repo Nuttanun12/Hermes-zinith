@@ -2,8 +2,8 @@
 
 import { motion, Variants } from 'framer-motion'
 import { MapPin, Phone, Mail, Send, Hexagon } from 'lucide-react'
-import { PageHero } from './ui/PageHero'
-import { SectionHeader } from './ui/SectionHeader'
+import { PageHero } from '@/components/ui/PageHero'
+import { SectionHeader } from '@/components/ui/SectionHeader'
 
 export default function ContactClient({ dict }: { dict: any }) {
   const containerVariants: Variants = {
@@ -40,9 +40,9 @@ export default function ContactClient({ dict }: { dict: any }) {
         
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
           <SectionHeader 
-            title="Get In Touch" 
-            label="Inquiries"
-            subtitle="Our technical team is ready to assist you with equipment analysis, maintenance schedules, and custom industrial solutions."
+            title={dict.contact.title_main} 
+            label={dict.footer.inquiries}
+            subtitle={dict.home.contact_section.desc}
           />
 
           <motion.div
@@ -122,34 +122,34 @@ export default function ContactClient({ dict }: { dict: any }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="relative">
                       <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2 ml-1">
-                        Full Name
+                        {dict.home.contact_section.name_label}
                       </label>
                       <input
                         type="text"
                         placeholder={dict.home.contact_section.name_placeholder}
-                        className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium"
+                        className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium text-black placeholder:text-gray-400"
                       />
                     </div>
                     <div className="relative">
                       <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2 ml-1">
-                        Email Address
+                        {dict.home.contact_section.email_label_field}
                       </label>
                       <input
                         type="email"
                         placeholder={dict.home.contact_section.email_placeholder}
-                        className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium"
+                        className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium text-black placeholder:text-gray-400"
                       />
                     </div>
                   </div>
                   <div className="relative">
                     <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2 ml-1">
-                      Your Message
+                      {dict.home.contact_section.message_label_field}
                     </label>
                     <textarea
                       rows={6}
                       placeholder={dict.home.contact_section.message_placeholder}
-                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium resize-none"
-                    />
+                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium resize-none text-black placeholder:text-gray-400"
+                      />
                   </div>
                   <button
                     type="submit"

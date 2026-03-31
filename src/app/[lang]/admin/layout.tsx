@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Locale } from '@/i18n-config'
-import LogoutButton from '@/components/LogoutButton'
+import LogoutButton from '@/components/layout/LogoutButton'
 import { getDictionary } from '@/get-dictionary'
 
 export default async function AdminLayout({
@@ -27,9 +27,9 @@ export default async function AdminLayout({
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-              <span className="text-primary font-black text-xl">H</span>
-            </div>
+          <div className="flex items-center">
+            <img src="/logo.svg" alt="Hermes-Zenith Logo" className="h-10 w-auto" />
+          </div>
             <h1 className="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">
               {dict.admin.dashboard}
             </h1>

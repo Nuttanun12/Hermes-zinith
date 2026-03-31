@@ -3,7 +3,7 @@
 import { motion, Variants } from 'framer-motion'
 import { ArrowRight, Settings, ShieldCheck, Factory, Wind, Droplets, Palette, Filter, MapPin, Phone, Mail, Send, Target, Eye, Hexagon } from 'lucide-react'
 import Link from 'next/link'
-import { SectionHeader } from './ui/SectionHeader'
+import { SectionHeader } from '@/components/ui/SectionHeader'
 
 export default function HomeClient({ dict, lang }: { dict: any; lang: string }) {
   const containerVariants: Variants = {
@@ -85,7 +85,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
             className="inline-block mb-10"
           >
             <span className="text-primary text-xs md:text-sm font-black tracking-[0.5em] uppercase py-3 px-6 border border-primary/30 rounded-full backdrop-blur-md bg-primary/5">
-              Premium Industrial Solutions
+              {dict.home.hero.badge}
             </span>
           </motion.div>
 
@@ -171,7 +171,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
                 {dict.products.categories.air_compressor}
               </h3>
               <p className="text-gray-500 leading-relaxed text-lg">
-                State-of-the-art compressors and related spare parts ensuring optimal runtime.
+                {dict.home.features.air_compressor_desc}
               </p>
             </motion.div>
 
@@ -187,7 +187,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
                 {dict.products.categories.filters} & {dict.products.categories.lubrication}
               </h3>
               <p className="text-gray-500 leading-relaxed text-lg">
-                Advanced filtration and MQL Automatic Grease Systems for asset protection.
+                {dict.home.features.filtration_desc}
               </p>
             </motion.div>
 
@@ -201,7 +201,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
               </div>
               <h3 className="text-2xl font-bold mb-5 uppercase text-foreground tracking-tight">{dict.nav.services}</h3>
               <p className="text-gray-500 leading-relaxed text-lg">
-                Comprehensive repair, cleaning, starting, and checking services by professionals.
+                {dict.home.features.services_desc}
               </p>
             </motion.div>
           </motion.div>
@@ -226,6 +226,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
                 label={dict.home.about_section.title}
                 centered={false}
                 icon={<Hexagon />}
+                dark={true}
               />
               <p className="text-gray-400 text-xl leading-relaxed mb-12 italic border-l-4 border-primary/30 pl-8">
                 {dict.home.about_section.desc}
@@ -354,28 +355,28 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
                <div className="bg-white rounded-[3rem] p-12 md:p-16 shadow-2xl border border-gray-100 relative group overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
                   <h3 className="text-3xl font-black text-foreground mb-10 uppercase tracking-tight">
-                    Quick Inquiry
+                    {dict.home.contact_section.quick_inquiry}
                   </h3>
                   <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                        <input 
                          type="text" 
-                         placeholder="Full Name"
-                         className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                         placeholder={dict.home.contact_section.name_placeholder}
+                         className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-gray-400 text-black"
                        />
                        <input 
                          type="email" 
-                         placeholder="Email Address"
-                         className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                         placeholder={dict.home.contact_section.email_placeholder}
+                         className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-gray-400 text-black"
                        />
                     </div>
                     <textarea 
-                      placeholder="How can we help you?"
+                      placeholder={dict.home.contact_section.message_placeholder}
                       rows={4}
-                      className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                      className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none placeholder:text-gray-400 text-black"
                     />
                     <button className="w-full py-6 bg-primary text-white font-black uppercase tracking-widest rounded-2xl hover:bg-primary-dark transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-primary/20">
-                      Send Message
+                      {dict.home.contact_section.submit}
                     </button>
                   </form>
                </div>
