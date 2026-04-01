@@ -1,9 +1,10 @@
 'use client'
 
 import { motion, Variants } from 'framer-motion'
-import { ArrowRight, Settings, ShieldCheck, Factory, Wind, Droplets, Palette, Filter, MapPin, Phone, Mail, Send, Target, Eye, Hexagon } from 'lucide-react'
+import { ArrowRight, Settings, ShieldCheck, Factory, Wind, Droplets, Palette, Filter, MapPin, Phone, Mail, Target, Eye, Hexagon } from 'lucide-react'
 import Link from 'next/link'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import { ContactForm } from '@/components/features/contact/ContactForm'
 
 export default function HomeClient({ dict, lang }: { dict: any; lang: string }) {
   const containerVariants: Variants = {
@@ -357,28 +358,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
                   <h3 className="text-3xl font-black text-foreground mb-10 uppercase tracking-tight">
                     {dict.home.contact_section.quick_inquiry}
                   </h3>
-                  <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                       <input 
-                         type="text" 
-                         placeholder={dict.home.contact_section.name_placeholder}
-                         className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-gray-400 text-black"
-                       />
-                       <input 
-                         type="email" 
-                         placeholder={dict.home.contact_section.email_placeholder}
-                         className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-gray-400 text-black"
-                       />
-                    </div>
-                    <textarea 
-                      placeholder={dict.home.contact_section.message_placeholder}
-                      rows={4}
-                      className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none placeholder:text-gray-400 text-black"
-                    />
-                    <button className="w-full py-6 bg-primary text-white font-black uppercase tracking-widest rounded-2xl hover:bg-primary-dark transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-primary/20 cursor-pointer">
-                      {dict.home.contact_section.submit}
-                    </button>
-                  </form>
+                  <ContactForm dict={dict} />
                </div>
             </motion.div>
           </div>

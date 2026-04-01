@@ -1,9 +1,10 @@
 'use client'
 
 import { motion, Variants } from 'framer-motion'
-import { MapPin, Phone, Mail, Send, Hexagon } from 'lucide-react'
+import { MapPin, Phone, Mail, Hexagon } from 'lucide-react'
 import { PageHero } from '@/components/ui/PageHero'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import { ContactForm } from '@/components/features/contact/ContactForm'
 
 export default function ContactClient({ dict }: { dict: any }) {
   const containerVariants: Variants = {
@@ -118,47 +119,7 @@ export default function ContactClient({ dict }: { dict: any }) {
                   {dict.home.contact_section.send_message}
                 </h3>
                 
-                <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="relative">
-                      <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2 ml-1">
-                        {dict.home.contact_section.name_label}
-                      </label>
-                      <input
-                        type="text"
-                        placeholder={dict.home.contact_section.name_placeholder}
-                        className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium text-black placeholder:text-gray-400"
-                      />
-                    </div>
-                    <div className="relative">
-                      <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2 ml-1">
-                        {dict.home.contact_section.email_label_field}
-                      </label>
-                      <input
-                        type="email"
-                        placeholder={dict.home.contact_section.email_placeholder}
-                        className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium text-black placeholder:text-gray-400"
-                      />
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2 ml-1">
-                      {dict.home.contact_section.message_label_field}
-                    </label>
-                    <textarea
-                      rows={6}
-                      placeholder={dict.home.contact_section.message_placeholder}
-                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium resize-none text-black placeholder:text-gray-400"
-                      />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-black rounded-2xl hover:bg-primary-dark transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-widest uppercase text-xs shadow-xl shadow-primary/20 cursor-pointer"
-                  >
-                    <Send className="w-5 h-5 mr-3" />
-                    {dict.home.contact_section.submit}
-                  </button>
-                </form>
+                <ContactForm dict={dict} />
               </div>
             </motion.div>
           </motion.div>

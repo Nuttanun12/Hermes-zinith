@@ -61,7 +61,10 @@
       "name_placeholder": "Your Name",
       "email_placeholder": "Your Email",
       "message_placeholder": "Your Message",
-      "submit": "Send Message"
+      "submit": "Send Message",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message. Please try again.",
+      "sending": "Sending..."
     }
   },
   "about": {

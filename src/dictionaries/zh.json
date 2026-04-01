@@ -61,7 +61,10 @@
       "name_placeholder": "您的姓名",
       "email_placeholder": "您的电邮",
       "message_placeholder": "您的留言",
-      "submit": "发送消息"
+      "submit": "发送消息",
+      "success": "消息发送成功！",
+      "error": "发送失败，请稍后再试。",
+      "sending": "发送中..."
     }
   },
   "about": {
