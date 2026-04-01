@@ -96,7 +96,7 @@ export default function LoginClient({ dict, lang }: LoginClientProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-black rounded-2xl hover:bg-primary-dark transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-[0.2em] uppercase text-xs shadow-xl shadow-primary/20 disabled:opacity-50"
+              className="w-full inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-black rounded-2xl hover:bg-primary-dark transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-[0.2em] uppercase text-xs shadow-xl shadow-primary/20 disabled:opacity-50 cursor-pointer"
             >
                {loading ? (
                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3" />

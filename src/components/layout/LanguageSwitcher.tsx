@@ -78,7 +78,7 @@ export default function LanguageSwitcher({
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none"
+        className="flex items-center space-x-2 px-3 py-2 text-sm font-semibold text-foreground hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none cursor-pointer"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
@@ -109,7 +109,7 @@ export default function LanguageSwitcher({
                   className={`flex items-center w-full px-4 py-3 text-sm transition-colors duration-150 ${
                     currentLocale === locale
                       ? 'bg-primary/5 text-primary'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
                   }`}
                 >
                    <span className="shrink-0 mr-3">{flags[locale]}</span>

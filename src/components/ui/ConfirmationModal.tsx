@@ -27,7 +27,7 @@ export function ConfirmationModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -65,7 +65,7 @@ export function ConfirmationModal({
             <div className="p-10 pt-0 flex flex-col sm:flex-row gap-4">
               <button
                 onClick={onClose}
-                className="flex-1 px-8 py-4 bg-gray-50 text-gray-600 text-xs font-black rounded-2xl hover:bg-gray-100 transition-all tracking-widest uppercase"
+                className="flex-1 px-8 py-4 bg-gray-50 text-gray-600 text-xs font-black rounded-2xl hover:bg-gray-100 transition-all tracking-widest uppercase cursor-pointer"
               >
                 {cancelText}
               </button>
@@ -74,7 +74,7 @@ export function ConfirmationModal({
                   onConfirm()
                   onClose()
                 }}
-                className={`flex-1 px-8 py-4 text-white text-xs font-black rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 tracking-widest uppercase shadow-xl ${
+                className={`flex-1 px-8 py-4 text-white text-xs font-black rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 tracking-widest uppercase shadow-xl cursor-pointer ${
                   isDangerous 
                     ? 'bg-red-600 hover:bg-red-700 shadow-red-200' 
                     : 'bg-primary hover:bg-primary-dark shadow-primary/20'
@@ -87,7 +87,7 @@ export function ConfirmationModal({
             {/* Close Button (Top right) */}
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 transition-colors"
+              className="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>

@@ -82,7 +82,7 @@ export default function AdminListClient({
                 </Link>
                 <button
                   onClick={() => triggerDelete(product.id, product.image_url)}
-                  className="text-red-600 hover:text-red-900 inline-flex items-center"
+                  className="text-red-600 hover:text-red-900 inline-flex items-center cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4 mr-1" />
                   {dict.admin.delete}

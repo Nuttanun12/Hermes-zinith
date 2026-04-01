@@ -180,7 +180,7 @@ export default function ProductFormClient({
               <button 
                 type="button"
                 onClick={() => setShowCategoryManager(!showCategoryManager)}
-                className="text-xs text-primary font-bold flex items-center hover:underline"
+                className="text-xs text-primary font-bold flex items-center hover:underline cursor-pointer"
               >
                 <Tag className="w-3 h-3 mr-1" />
                 {showCategoryManager ? 'Close Manager' : 'Manage Categories'}
@@ -196,7 +196,7 @@ export default function ProductFormClient({
                       <button 
                         type="button"
                         onClick={() => handleDeleteCategory(cat.slug)}
-                        className="ml-2 text-red-400 hover:text-red-600"
+                        className="ml-2 text-red-400 hover:text-red-600 cursor-pointer"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -209,25 +209,25 @@ export default function ProductFormClient({
                   <div className="grid grid-cols-2 gap-3">
                     <input 
                       placeholder="Slug (e.g. pumps)" 
-                      className="p-2 border rounded text-[10px]" 
+                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.slug}
                       onChange={(e) => setNewCat({...newCat, slug: e.target.value})}
                     />
                     <input 
                       placeholder="Name (EN)" 
-                      className="p-2 border rounded text-[10px]" 
+                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.name_en}
                       onChange={(e) => setNewCat({...newCat, name_en: e.target.value})}
                     />
                     <input 
                       placeholder="Name (TH)" 
-                      className="p-2 border rounded text-[10px]" 
+                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.name_th}
                       onChange={(e) => setNewCat({...newCat, name_th: e.target.value})}
                     />
                     <input 
                       placeholder="Name (ZH)" 
-                      className="p-2 border rounded text-[10px]" 
+                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.name_zh}
                       onChange={(e) => setNewCat({...newCat, name_zh: e.target.value})}
                     />
@@ -235,7 +235,7 @@ export default function ProductFormClient({
                   <button 
                     type="button"
                     onClick={handleAddCategory}
-                    className="mt-3 w-full py-2 bg-gray-900 text-white rounded text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors"
+                    className="mt-3 w-full py-2 bg-gray-900 text-white rounded text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors cursor-pointer"
                   >
                     Add Category
                   </button>
@@ -243,7 +243,7 @@ export default function ProductFormClient({
               </div>
             )}
 
-            <select name="category" value={formData.category} onChange={handleChange} className="w-full border-gray-300 rounded focus:ring-primary focus:border-primary p-2 border bg-white text-black">
+            <select name="category" value={formData.category} onChange={handleChange} className="w-full border-gray-300 rounded focus:ring-primary focus:border-primary p-2 border bg-white text-black cursor-pointer">
               <option value="">{dict.admin.select_category}</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.slug}>
@@ -264,7 +264,7 @@ export default function ProductFormClient({
 
           <div>
             <label className="block text-gray-700 font-medium mb-1">{dict.admin.product_image}</label>
-            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" />
             {initialData?.image_url && !file && (
               <div className="mt-2 text-xs text-gray-500">{dict.admin.current_image}</div>
             )}
@@ -274,7 +274,7 @@ export default function ProductFormClient({
         <button
           type="submit"
           disabled={loading}
-          className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-primary-dark text-white rounded font-bold uppercase tracking-widest disabled:opacity-50 transition-colors"
+          className="w-full md:w-auto px-8 py-3 bg-primary hover:bg-primary-dark text-white rounded font-bold uppercase tracking-widest disabled:opacity-50 transition-colors cursor-pointer"
         >
           {loading ? dict.admin.saving : dict.admin.save}
         </button>

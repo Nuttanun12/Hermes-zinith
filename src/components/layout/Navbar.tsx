@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { getDictionary } from '@/get-dictionary'
 import { type Locale } from '@/i18n-config'
 import LanguageSwitcher from './LanguageSwitcher'
-import { Hexagon } from 'lucide-react'
 
 export async function Navbar({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)

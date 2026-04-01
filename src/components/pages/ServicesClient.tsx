@@ -4,8 +4,9 @@ import { motion, Variants } from 'framer-motion'
 import { Wrench, Zap, CheckCircle2, ArrowRight, ShieldCheck, Settings, Activity, Hexagon } from 'lucide-react'
 import { PageHero } from '@/components/ui/PageHero'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import Link from 'next/link'
 
-export default function ServicesClient({ dict }: { dict: any }) {
+export default function ServicesClient({ dict, lang }: { dict: any; lang: string }) {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -167,13 +168,13 @@ export default function ServicesClient({ dict }: { dict: any }) {
               <p className="text-primary-light text-lg mb-12 opacity-90 italic">
                 {dict.services.cta_desc}
               </p>
-              <a 
-                href="#contact" 
+              <Link
+                href={`/${lang}/contact`} 
                 className="inline-flex items-center px-16 py-6 bg-white text-primary font-bold rounded-full hover:bg-gray-100 transition-all duration-300 group shadow-xl uppercase tracking-widest text-sm"
               >
                 {dict.services.cta_button}
                 <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </a>
+              </Link>
             </div>
             
             {/* Decors */}

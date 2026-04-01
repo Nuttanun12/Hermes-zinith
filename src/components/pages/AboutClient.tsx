@@ -4,8 +4,9 @@ import { motion, Variants } from 'framer-motion'
 import { Landmark, ShieldCheck, Users, Briefcase, Award, TrendingUp, Factory, Hexagon } from 'lucide-react'
 import { PageHero } from '@/components/ui/PageHero'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import Link from 'next/link'
 
-export default function AboutClient({ dict }: { dict: any }) {
+export default function AboutClient({ dict, lang }: { dict: any; lang: string }) {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -142,12 +143,12 @@ export default function AboutClient({ dict }: { dict: any }) {
              <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 uppercase tracking-tight">
                 {dict.about.cta_title}
              </h2>
-             <a 
-               href="#contact" 
+             <Link 
+               href={`/${lang}/contact`} 
                className="inline-flex items-center px-12 py-5 bg-white text-primary font-bold rounded-full hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl uppercase tracking-widest text-sm"
              >
                 {dict.about.cta_button}
-             </a>
+             </Link>
           </div>
        </section>
     </div>

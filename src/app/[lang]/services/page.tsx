@@ -10,5 +10,5 @@ export default async function ServicesPage({
   const resolvedParams = await params
   const dict = await getDictionary(resolvedParams.lang as Locale)
 
-  return <ServicesClient dict={dict} />
+  return <ServicesClient dict={dict} lang={resolvedParams.lang} />
 }

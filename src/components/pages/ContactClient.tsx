@@ -153,7 +153,7 @@ export default function ContactClient({ dict }: { dict: any }) {
                   </div>
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-black rounded-2xl hover:bg-primary-dark transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-widest uppercase text-xs shadow-xl shadow-primary/20"
+                    className="w-full inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-black rounded-2xl hover:bg-primary-dark transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-widest uppercase text-xs shadow-xl shadow-primary/20 cursor-pointer"
                   >
                     <Send className="w-5 h-5 mr-3" />
                     {dict.home.contact_section.submit}

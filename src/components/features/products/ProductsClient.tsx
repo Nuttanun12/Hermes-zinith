@@ -80,7 +80,7 @@ export default function ProductsClient({
 
           <button
             onClick={() => setShowCategories(!showCategories)}
-            className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all duration-300 border ${
+            className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all duration-300 border cursor-pointer ${
               showCategories || selectedCategory !== 'all'
                 ? 'bg-primary/5 border-primary/20 text-primary shadow-xs'
                 : 'bg-gray-50 border-gray-100 text-gray-500 hover:bg-gray-100'
@@ -117,7 +117,7 @@ export default function ProductsClient({
                     className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 border ${
                       selectedCategory === cat
                         ? 'bg-primary text-white shadow-lg shadow-primary/30 border-primary'
-                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 border-gray-100'
+                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 border-gray-100 cursor-pointer'
                     }`}
                   >
                     {getCategoryLabel(cat)}

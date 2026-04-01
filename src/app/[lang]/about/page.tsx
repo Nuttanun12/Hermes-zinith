@@ -10,5 +10,5 @@ export default async function AboutPage({
   const resolvedParams = await params
   const dict = await getDictionary(resolvedParams.lang as Locale)
 
-  return <AboutClient dict={dict} />
+  return <AboutClient  dict={dict} lang={resolvedParams.lang} />
 }

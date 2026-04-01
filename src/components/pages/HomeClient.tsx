@@ -375,7 +375,7 @@ export default function HomeClient({ dict, lang }: { dict: any; lang: string }) 
                       rows={4}
                       className="w-full bg-gray-50 border-none rounded-2xl p-5 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none placeholder:text-gray-400 text-black"
                     />
-                    <button className="w-full py-6 bg-primary text-white font-black uppercase tracking-widest rounded-2xl hover:bg-primary-dark transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-primary/20">
+                    <button className="w-full py-6 bg-primary text-white font-black uppercase tracking-widest rounded-2xl hover:bg-primary-dark transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-primary/20 cursor-pointer">
                       {dict.home.contact_section.submit}
                     </button>
                   </form>
