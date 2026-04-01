@@ -188,6 +188,19 @@
     "error_updating": "更新出错",
     "error_inserting": "插入出错",
     "cancel": "取消",
-    "confirm": "确认"
+    "confirm": "确认",
+    "manage_categories": "管理类别",
+    "close_manager": "关闭管理器",
+    "add_new_category": "添加新类别",
+    "category_slug_placeholder": "别名 (例如 pumps)",
+    "category_name_en_placeholder": "名称 (EN)",
+    "category_name_th_placeholder": "名称 (TH)",
+    "category_name_zh_placeholder": "名称 (ZH)",
+    "add_category_btn": "添加类别",
+    "lang_en": "英语",
+    "lang_th": "泰语",
+    "lang_zh": "中文",
+    "error_adding_category": "添加类别时出错",
+    "error_deleting_category": "删除类别时出错"
   }
 }

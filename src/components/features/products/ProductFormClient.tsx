@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { v4 as uuidv4 } from 'uuid'
 import { Plus, Trash2, Tag, ChevronDown, ChevronUp } from 'lucide-react'
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal'
 
 export default function ProductFormClient({
   initialData,
@@ -31,6 +32,8 @@ export default function ProductFormClient({
   const [categories, setCategories] = useState<any[]>([])
   const [showCategoryManager, setShowCategoryManager] = useState(false)
   const [newCat, setNewCat] = useState({ slug: '', name_en: '', name_th: '', name_zh: '' })
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null)
   
   const supabase = createClient()
   const router = useRouter()
@@ -55,19 +58,25 @@ export default function ProductFormClient({
       setNewCat({ slug: '', name_en: '', name_th: '', name_zh: '' })
       fetchCategories()
     } else {
-      alert('Error adding category: ' + error.message)
+      alert(dict.admin.error_adding_category + ': ' + error.message)
     }
   }
 
-  const handleDeleteCategory = async (slug: string) => {
-    if (!confirm(dict.admin.delete_confirm_msg || 'Are you sure?')) return
+  const handleDeleteCategory = (slug: string) => {
+    setCategoryToDelete(slug)
+    setIsDeleteModalOpen(true)
+  }
+
+  const confirmDeleteCategory = async () => {
+    if (!categoryToDelete) return
     
-    const { error } = await supabase.from('categories').delete().eq('slug', slug)
+    const { error } = await supabase.from('categories').delete().eq('slug', categoryToDelete)
     if (!error) {
       fetchCategories()
     } else {
-      alert('Error deleting category: ' + error.message)
+      alert(dict.admin.error_deleting_category + ': ' + error.message)
     }
+    setCategoryToDelete(null)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -85,17 +94,18 @@ export default function ProductFormClient({
       const fileExt = file.name.split('.').pop()
       const fileName = `${uuidv4()}.${fileExt}`
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('products')
+        .from('Product_img')
         .upload(fileName, file)
 
       if (uploadError) {
-        alert(dict.admin.error_uploading)
+        console.error('Storage error:', uploadError)
+        alert(dict.admin.error_uploading + ': ' + uploadError.message)
         setLoading(false)
         return
       }
 
       const { data: { publicUrl } } = supabase.storage
-        .from('products')
+        .from('Product_img')
         .getPublicUrl(fileName)
 
       image_url = publicUrl
@@ -109,13 +119,23 @@ export default function ProductFormClient({
         .update(payload)
         .eq('id', initialData.id)
 
-      if (error) alert(dict.admin.error_updating)
+      if (error) {
+        console.error('Update error:', error)
+        alert(dict.admin.error_updating + ': ' + error.message)
+        setLoading(false)
+        return
+      }
     } else {
       const { error } = await supabase
         .from('products')
         .insert(payload)
 
-      if (error) alert(dict.admin.error_inserting)
+      if (error) {
+        console.error('Insert error:', error)
+        alert(dict.admin.error_inserting + ': ' + error.message)
+        setLoading(false)
+        return
+      }
     }
 
     setLoading(false)
@@ -132,7 +152,7 @@ export default function ProductFormClient({
       <form onSubmit={handleSubmit} className="space-y-8 text-sm">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-3">
-            <h3 className="font-semibold text-gray-700 mb-2 underline underline-offset-4 uppercase tracking-wider">English</h3>
+            <h3 className="font-semibold text-gray-700 mb-2 underline underline-offset-4 uppercase tracking-wider">{dict.admin.lang_en}</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-gray-700 font-medium mb-1">{dict.admin.product_name} (EN)</label>
@@ -145,7 +165,7 @@ export default function ProductFormClient({
             </div>
           </div>
           <div className="md:col-span-3">
-            <h3 className="font-semibold text-gray-700 mb-2 underline underline-offset-4 uppercase tracking-wider">Thai</h3>
+            <h3 className="font-semibold text-gray-700 mb-2 underline underline-offset-4 uppercase tracking-wider">{dict.admin.lang_th}</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-gray-700 font-medium mb-1">{dict.admin.product_name} (TH)</label>
@@ -159,7 +179,7 @@ export default function ProductFormClient({
           </div>
 
           <div className="md:col-span-3">
-            <h3 className="font-semibold text-gray-700 mb-2 underline underline-offset-4 uppercase tracking-wider">Chinese</h3>
+            <h3 className="font-semibold text-gray-700 mb-2 underline underline-offset-4 uppercase tracking-wider">{dict.admin.lang_zh}</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-gray-700 font-medium mb-1">{dict.admin.product_name} (ZH)</label>
@@ -183,7 +203,7 @@ export default function ProductFormClient({
                 className="text-xs text-primary font-bold flex items-center hover:underline cursor-pointer"
               >
                 <Tag className="w-3 h-3 mr-1" />
-                {showCategoryManager ? 'Close Manager' : 'Manage Categories'}
+                {showCategoryManager ? dict.admin.close_manager : dict.admin.manage_categories}
               </button>
             </div>
 
@@ -205,28 +225,28 @@ export default function ProductFormClient({
                 </div>
 
                 <div className="border-t border-gray-200 pt-4">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Add New Category</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">{dict.admin.add_new_category}</p>
                   <div className="grid grid-cols-2 gap-3">
                     <input 
-                      placeholder="Slug (e.g. pumps)" 
+                      placeholder={dict.admin.category_slug_placeholder} 
                       className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.slug}
                       onChange={(e) => setNewCat({...newCat, slug: e.target.value})}
                     />
                     <input 
-                      placeholder="Name (EN)" 
+                      placeholder={dict.admin.category_name_en_placeholder} 
                       className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.name_en}
                       onChange={(e) => setNewCat({...newCat, name_en: e.target.value})}
                     />
                     <input 
-                      placeholder="Name (TH)" 
+                      placeholder={dict.admin.category_name_th_placeholder} 
                       className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.name_th}
                       onChange={(e) => setNewCat({...newCat, name_th: e.target.value})}
                     />
                     <input 
-                      placeholder="Name (ZH)" 
+                      placeholder={dict.admin.category_name_zh_placeholder} 
                       className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
                       value={newCat.name_zh}
                       onChange={(e) => setNewCat({...newCat, name_zh: e.target.value})}
@@ -237,7 +257,7 @@ export default function ProductFormClient({
                     onClick={handleAddCategory}
                     className="mt-3 w-full py-2 bg-gray-900 text-white rounded text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors cursor-pointer"
                   >
-                    Add Category
+                    {dict.admin.add_category_btn}
                   </button>
                 </div>
               </div>
@@ -279,6 +299,17 @@ export default function ProductFormClient({
           {loading ? dict.admin.saving : dict.admin.save}
         </button>
       </form>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDeleteCategory}
+        title={dict.admin.confirm_delete}
+        message={dict.admin.delete_confirm_msg}
+        confirmText={dict.admin.confirm}
+        cancelText={dict.admin.cancel}
+        isDangerous={true}
+      />
     </div>
   )
 }

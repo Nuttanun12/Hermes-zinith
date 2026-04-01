@@ -188,6 +188,19 @@
     "error_updating": "ข้อผิดพลาดในการอัปเดต",
     "error_inserting": "ข้อผิดพลาดในการแทรก",
     "cancel": "ยกเลิก",
-    "confirm": "ยืนยัน"
+    "confirm": "ยืนยัน",
+    "manage_categories": "จัดการหมวดหมู่",
+    "close_manager": "ปิดหน้าต่างจัดการ",
+    "add_new_category": "เพิ่มหมวดหมู่ใหม่",
+    "category_slug_placeholder": "สลัก (เช่น pumps)",
+    "category_name_en_placeholder": "ชื่อ (EN)",
+    "category_name_th_placeholder": "ชื่อ (TH)",
+    "category_name_zh_placeholder": "ชื่อ (ZH)",
+    "add_category_btn": "เพิ่มหมวดหมู่",
+    "lang_en": "ภาษาอังกฤษ",
+    "lang_th": "ภาษาไทย",
+    "lang_zh": "ภาษาจีน",
+    "error_adding_category": "เกิดข้อผิดพลาดในการเพิ่มหมวดหมู่",
+    "error_deleting_category": "เกิดข้อผิดพลาดในการลบหมวดหมู่"
   }
 }

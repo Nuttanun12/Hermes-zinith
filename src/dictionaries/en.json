@@ -188,6 +188,19 @@
     "error_updating": "Error updating",
     "error_inserting": "Error inserting",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "manage_categories": "Manage Categories",
+    "close_manager": "Close Manager",
+    "add_new_category": "Add New Category",
+    "category_slug_placeholder": "Slug (e.g. pumps)",
+    "category_name_en_placeholder": "Name (EN)",
+    "category_name_th_placeholder": "Name (TH)",
+    "category_name_zh_placeholder": "Name (ZH)",
+    "add_category_btn": "Add Category",
+    "lang_en": "English",
+    "lang_th": "Thai",
+    "lang_zh": "Chinese",
+    "error_adding_category": "Error adding category",
+    "error_deleting_category": "Error deleting category"
   }
 }
