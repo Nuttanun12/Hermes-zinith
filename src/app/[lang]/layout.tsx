@@ -31,8 +31,8 @@ export default async function RootLayout({
   const resolvingLang = resolvedParams.lang as Locale
   
   return (
-    <html lang={resolvedParams.lang}>
-      <body className={inter.className}>
+    <html lang={resolvedParams.lang} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <Navbar lang={resolvingLang} />
         <main className="min-h-screen bg-gray-50">{children}</main>
         <Footer lang={resolvingLang} />

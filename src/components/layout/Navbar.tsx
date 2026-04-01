@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getDictionary } from '@/get-dictionary'
 import { type Locale } from '@/i18n-config'
 import LanguageSwitcher from './LanguageSwitcher'
+import MobileMenu from './MobileMenu'
 
 export async function Navbar({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)
@@ -11,11 +12,12 @@ export async function Navbar({ lang }: { lang: Locale }) {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href={`/${lang}`} className="flex items-center gap-x-4 transition-transform hover:scale-105">
           <img src="/logo.svg" alt="Hermes-Zenith Logo" className="h-10 w-auto" />
-          <span className="font-black text-xl tracking-tighter text-foreground uppercase hidden sm:block">
+          <span className="font-black text-lg tracking-tighter text-foreground uppercase">
             Hermes-Zenith
           </span>
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 items-center">
           <Link
             href={`/${lang}/about`}
@@ -43,6 +45,9 @@ export async function Navbar({ lang }: { lang: Locale }) {
             {dict.nav.contact}
           </Link>
         </nav>
+
+        {/* Mobile Navigation */}
+        <MobileMenu dict={dict} lang={lang} />
       </div>
     </header>
   )
