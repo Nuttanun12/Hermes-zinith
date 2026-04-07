@@ -27,7 +27,7 @@ export default function AboutClient({ dict, lang }: { dict: any; lang: string })
   }
 
   const statCards = [
-    { label: dict.about.stats.experience, value: '15+', icon: Briefcase },
+    { label: dict.about.stats.experience, value: '2+', icon: Briefcase },
     { label: dict.about.stats.reliability, value: '100%', icon: ShieldCheck },
     { label: dict.about.stats.partners, value: '50+', icon: Users },
   ]
