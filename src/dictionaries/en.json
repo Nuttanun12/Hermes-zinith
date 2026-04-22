@@ -115,7 +115,11 @@
     "category_label": "Category",
     "filter_all": "All",
     "hero_title": "Industrial Solutions Catalog",
-    "hero_subtitle": "Explore our comprehensive range of high-performance rotating equipment and spare parts."
+    "hero_subtitle": "Explore our comprehensive range of high-performance rotating equipment and spare parts.",
+    "items_label": "items",
+    "searching": "Searching...",
+    "loading_more": "Loading more...",
+    "all_loaded": "All products loaded"
   },
   "services": {
     "title": "Industrial Services",

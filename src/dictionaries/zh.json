@@ -115,7 +115,11 @@
     "category_label": "类别",
     "filter_all": "全部",
     "hero_title": "工业解决方案目录",
-    "hero_subtitle": "探索我们全面的高性能旋转设备和备件系列。"
+    "hero_subtitle": "探索我们全面的高性能旋转设备和备件系列。",
+    "items_label": "项",
+    "searching": "搜索中...",
+    "loading_more": "加载更多...",
+    "all_loaded": "所有产品已加载"
   },
   "services": {
     "title": "工业服务",

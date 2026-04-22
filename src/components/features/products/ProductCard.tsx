@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Package } from 'lucide-react'
 import Link from 'next/link'
 
@@ -10,6 +13,8 @@ export function ProductCard({
   lang: string
   dict: any
 }) {
+  const [imageLoaded, setImageLoaded] = useState(false)
+
   const getLocalizedField = (field: string) => {
     switch (lang) {
       case 'th': return product[`${field}_th`] || product[`${field}_en`]
@@ -31,11 +36,22 @@ export function ProductCard({
           </span>
         </div>
         {product.image_url ? (
-          <img 
-            src={product.image_url} 
-            alt={title || 'Product Image'} 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" 
-          />
+          <>
+            {/* Skeleton placeholder shown until image loads */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+            )}
+            <img 
+              src={product.image_url} 
+              alt={title || 'Product Image'} 
+              loading="lazy"
+              decoding="async"
+              onLoad={() => setImageLoaded(true)}
+              className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-out ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </>
         ) : (
           <div className="flex flex-col items-center gap-2 opacity-20">
             <Package className="w-16 h-16 text-gray-400" />

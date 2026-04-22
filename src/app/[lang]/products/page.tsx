@@ -5,6 +5,8 @@ import ProductsClient from '@/components/features/products/ProductsClient'
 import { PageHero } from '@/components/ui/PageHero'
 import { Package } from 'lucide-react'
 
+const PAGE_SIZE = 12
+
 export default async function ProductsPage({
   params,
 }: {
@@ -14,8 +16,15 @@ export default async function ProductsPage({
   const dict = await getDictionary(resolvedParams.lang as Locale)
   
   const supabase = await createClient()
-  const [{ data: products, error: productError }, { data: categories, error: categoryError }] = await Promise.all([
-    supabase.from('products').select('*').order('created_at', { ascending: false }),
+  const [
+    { data: products, error: productError, count },
+    { data: categories, error: categoryError }
+  ] = await Promise.all([
+    supabase
+      .from('products')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(0, PAGE_SIZE - 1),
     supabase.from('categories').select('*').order('name_en')
   ])
 
@@ -38,8 +47,9 @@ export default async function ProductsPage({
           </div>
         ) : (
           <ProductsClient 
-            products={products || []} 
+            initialProducts={products || []} 
             initialCategories={categories || []}
+            initialTotalCount={count || 0}
             dict={dict} 
             lang={resolvedParams.lang} 
           />
