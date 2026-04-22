@@ -1,18 +1,23 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { ProductCard } from './ProductCard'
-import { Search, Filter, X } from 'lucide-react'
+import { Search, Filter, X, Loader2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useDebounce } from '@/hooks/useDebounce'
+
+const PAGE_SIZE = 12
 
 export default function ProductsClient({
-  products,
+  initialProducts,
   initialCategories,
+  initialTotalCount,
   dict,
   lang,
 }: {
-  products: any[]
+  initialProducts: any[]
   initialCategories: any[]
+  initialTotalCount: number
   dict: any
   lang: string
 }) {
@@ -20,18 +25,32 @@ export default function ProductsClient({
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [showCategories, setShowCategories] = useState(false)
 
+  // Infinite scroll state
+  const [products, setProducts] = useState<any[]>(initialProducts)
+  const [page, setPage] = useState(0)
+  const [totalCount, setTotalCount] = useState(initialTotalCount)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  const debouncedSearch = useDebounce(searchQuery, 350)
+
+  const hasMore = products.length < totalCount
+
   const categories = useMemo(() => {
     if (initialCategories && initialCategories.length > 0) {
       return ['all', ...initialCategories.map(c => c.slug)]
     }
     const cats = ['all']
-    products.forEach(p => {
+    initialProducts.forEach(p => {
       if (p.category && !cats.includes(p.category)) {
         cats.push(p.category)
       }
     })
     return cats
-  }, [products, initialCategories])
+  }, [initialProducts, initialCategories])
 
   const getCategoryLabel = (slug: string) => {
     if (slug === 'all') return dict.products.filter_all
@@ -42,25 +61,115 @@ export default function ProductsClient({
             slug.replace(/_/g, ' '))
   }
 
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const title = (product[`title_${lang}`] || product.title_en || '').toLowerCase()
-      const desc = (product[`description_${lang}`] || product.description_en || '').toLowerCase()
-      const matchesSearch = title.includes(searchQuery.toLowerCase()) || desc.includes(searchQuery.toLowerCase())
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
-      return matchesSearch && matchesCategory
-    })
-  }, [products, searchQuery, selectedCategory, lang])
+  // Fetch products from API
+  const fetchProducts = useCallback(async (
+    pageNum: number,
+    search: string,
+    category: string,
+    append: boolean = false
+  ) => {
+    // Cancel any in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
+    if (append) {
+      setIsLoading(true)
+    } else {
+      setIsSearching(true)
+    }
+
+    try {
+      const params = new URLSearchParams({
+        page: String(pageNum),
+        limit: String(PAGE_SIZE),
+        search,
+        category,
+        lang,
+      })
+
+      const res = await fetch(`/api/products?${params}`, {
+        signal: controller.signal,
+      })
+
+      if (!res.ok) throw new Error('Failed to fetch')
+
+      const data = await res.json()
+
+      if (append) {
+        setProducts(prev => [...prev, ...data.products])
+      } else {
+        setProducts(data.products)
+      }
+
+      setTotalCount(data.totalCount)
+      setPage(pageNum)
+    } catch (err: any) {
+      if (err.name !== 'AbortError') {
+        console.error('Failed to fetch products:', err)
+      }
+    } finally {
+      setIsLoading(false)
+      setIsSearching(false)
+    }
+  }, [lang])
+
+  // When search or category changes, reset and refetch from page 0
+  useEffect(() => {
+    // On initial mount with no search/filter, use SSR data
+    if (debouncedSearch === '' && selectedCategory === 'all') {
+      setProducts(initialProducts)
+      setTotalCount(initialTotalCount)
+      setPage(0)
+      setIsSearching(false)
+      return
+    }
+
+    fetchProducts(0, debouncedSearch, selectedCategory, false)
+  }, [debouncedSearch, selectedCategory, fetchProducts, initialProducts, initialTotalCount])
+
+  // Show searching indicator when typing before debounce fires
+  useEffect(() => {
+    if (searchQuery !== debouncedSearch) {
+      setIsSearching(true)
+    }
+  }, [searchQuery, debouncedSearch])
+
+  // Load more (next page)
+  const loadMore = useCallback(() => {
+    if (isLoading || !hasMore) return
+    fetchProducts(page + 1, debouncedSearch, selectedCategory, true)
+  }, [isLoading, hasMore, page, debouncedSearch, selectedCategory, fetchProducts])
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoading && !isSearching) {
+          loadMore()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, isLoading, isSearching, loadMore])
 
   return (
     <div className="flex flex-col gap-12">
-      {/* Controls Bar */}
       {/* Controls Bar */}
       <div className="flex flex-col p-6 rounded-3xl shadow-xs border border-gray-100 sticky top-20 z-30 ring-1 ring-black/5 backdrop-blur-sm bg-white/90">
         <div className="flex flex-row gap-4 items-center">
           {/* Search */}
           <div className="relative flex-1 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+            <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${isSearching ? 'text-primary animate-pulse' : 'text-gray-400 group-focus-within:text-primary'}`} />
             <input
               type="text"
               placeholder={dict.products.search_placeholder}
@@ -129,9 +238,26 @@ export default function ProductsClient({
         </AnimatePresence>
       </div>
 
+      {/* Results count */}
+      <div className="flex items-center justify-between px-1">
+        <p className="text-sm text-gray-400">
+          <span className="font-bold text-gray-600">{products.length}</span>
+          {' / '}
+          <span>{totalCount}</span>
+          {' '}
+          {dict.products.items_label || 'items'}
+        </p>
+        {isSearching && (
+          <div className="flex items-center gap-2 text-primary text-sm">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span className="text-xs font-medium">{dict.products.searching || 'Searching...'}</span>
+          </div>
+        )}
+      </div>
+
       {/* Grid */}
       <div className="min-h-100">
-        {filteredProducts.length === 0 ? (
+        {products.length === 0 && !isSearching ? (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -144,29 +270,52 @@ export default function ProductsClient({
             <p className="text-gray-500">{dict.products.try_adjusting}</p>
           </motion.div>
         ) : (
-          <motion.div 
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-          >
-            <AnimatePresence mode='popLayout'>
-              {filteredProducts.map((product) => (
+          <>
+            <motion.div 
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+            >
+              <AnimatePresence mode='popLayout'>
+                {products.map((product) => (
+                  <motion.div
+                    layout
+                    key={product.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ProductCard
+                      product={product}
+                      lang={lang}
+                      dict={dict}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Sentinel element + loading indicator */}
+            <div ref={sentinelRef} className="flex justify-center py-12">
+              {isLoading && (
                 <motion.div
-                  layout
-                  key={product.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl shadow-lg border border-gray-100"
                 >
-                  <ProductCard
-                    product={product}
-                    lang={lang}
-                    dict={dict}
-                  />
+                  <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                  <span className="text-sm font-medium text-gray-600">
+                    {dict.products.loading_more || 'Loading more...'}
+                  </span>
                 </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+              )}
+              {!hasMore && products.length > 0 && (
+                <p className="text-sm text-gray-300 font-medium">
+                  {dict.products.all_loaded || 'All products loaded'}
+                </p>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
