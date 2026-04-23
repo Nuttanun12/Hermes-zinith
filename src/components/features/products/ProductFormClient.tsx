@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { v4 as uuidv4 } from 'uuid'
-import { Plus, Trash2, Tag, ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus, Trash2, Tag, ChevronDown, ChevronUp, GripVertical, X, ImagePlus } from 'lucide-react'
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal'
 
 export default function ProductFormClient({
@@ -27,20 +27,55 @@ export default function ProductFormClient({
     category: initialData?.category || '',
   })
 
-  const [file, setFile] = useState<File | null>(null)
+  // Multiple images support
+  // Existing images from the DB (URLs)
+  const getInitialImages = (): string[] => {
+    if (initialData?.image_urls && Array.isArray(initialData.image_urls) && initialData.image_urls.length > 0) {
+      return initialData.image_urls
+    }
+    if (initialData?.image_url) {
+      return [initialData.image_url]
+    }
+    return []
+  }
+
+  const [existingImages, setExistingImages] = useState<string[]>(getInitialImages)
+  const [newFiles, setNewFiles] = useState<File[]>([])
+  const [newFilePreviews, setNewFilePreviews] = useState<string[]>([])
+
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<any[]>([])
   const [showCategoryManager, setShowCategoryManager] = useState(false)
   const [newCat, setNewCat] = useState({ slug: '', name_en: '', name_th: '', name_zh: '' })
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null)
-  
+
+  // Drag state for reordering
+  const [dragIndex, setDragIndex] = useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+  const dragType = useRef<'existing' | 'new' | null>(null)
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
     fetchCategories()
   }, [])
+
+  // Generate previews for new files
+  useEffect(() => {
+    const previews: string[] = []
+    newFiles.forEach((file) => {
+      previews.push(URL.createObjectURL(file))
+    })
+    setNewFilePreviews(previews)
+
+    return () => {
+      previews.forEach((url) => URL.revokeObjectURL(url))
+    }
+  }, [newFiles])
 
   const fetchCategories = async () => {
     const { data, error } = await supabase.from('categories').select('*').order('name_en')
@@ -83,14 +118,92 @@ export default function ProductFormClient({
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  // Handle file selection
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+    setNewFiles((prev) => [...prev, ...files])
+    // Reset the input so the same file can be selected again
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  // Remove an existing image
+  const removeExistingImage = (index: number) => {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  // Remove a new file
+  const removeNewFile = (index: number) => {
+    setNewFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  // Drag handlers for existing images
+  const handleDragStartExisting = (index: number) => {
+    setDragIndex(index)
+    dragType.current = 'existing'
+  }
+
+  const handleDragOverExisting = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (dragType.current === 'existing') {
+      setDragOverIndex(index)
+    }
+  }
+
+  const handleDropExisting = (index: number) => {
+    if (dragType.current === 'existing' && dragIndex !== null && dragIndex !== index) {
+      setExistingImages((prev) => {
+        const copy = [...prev]
+        const [moved] = copy.splice(dragIndex, 1)
+        copy.splice(index, 0, moved)
+        return copy
+      })
+    }
+    setDragIndex(null)
+    setDragOverIndex(null)
+    dragType.current = null
+  }
+
+  // Drag handlers for new files
+  const handleDragStartNew = (index: number) => {
+    setDragIndex(index)
+    dragType.current = 'new'
+  }
+
+  const handleDragOverNew = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (dragType.current === 'new') {
+      setDragOverIndex(index)
+    }
+  }
+
+  const handleDropNew = (index: number) => {
+    if (dragType.current === 'new' && dragIndex !== null && dragIndex !== index) {
+      setNewFiles((prev) => {
+        const copy = [...prev]
+        const [moved] = copy.splice(dragIndex, 1)
+        copy.splice(index, 0, moved)
+        return copy
+      })
+    }
+    setDragIndex(null)
+    setDragOverIndex(null)
+    dragType.current = null
+  }
+
+  const handleDragEnd = () => {
+    setDragIndex(null)
+    setDragOverIndex(null)
+    dragType.current = null
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    let image_url = initialData?.image_url
-
-    // Handle Image Upload
-    if (file) {
+    // Upload new files
+    const uploadedUrls: string[] = []
+    for (const file of newFiles) {
       const fileExt = file.name.split('.').pop()
       const fileName = `${uuidv4()}.${fileExt}`
       const { data: uploadData, error: uploadError } = await supabase.storage
@@ -108,10 +221,18 @@ export default function ProductFormClient({
         .from('Product_img')
         .getPublicUrl(fileName)
 
-      image_url = publicUrl
+      uploadedUrls.push(publicUrl)
     }
 
-    const payload = { ...formData, image_url }
+    // Combine existing + newly uploaded
+    const allImageUrls = [...existingImages, ...uploadedUrls]
+
+    const payload = {
+      ...formData,
+      image_urls: allImageUrls,
+      // Keep image_url as the first image for backward compatibility
+      image_url: allImageUrls[0] || null,
+    }
 
     if (isEditing) {
       const { error } = await supabase
@@ -142,6 +263,8 @@ export default function ProductFormClient({
     router.push(`/${lang}/admin`)
     router.refresh()
   }
+
+  const totalImages = existingImages.length + newFiles.length
 
   return (
     <div className="bg-white shadow rounded-lg p-6 max-w-4xl mx-auto">
@@ -282,12 +405,139 @@ export default function ProductFormClient({
             </select>
           </div>
 
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">{dict.admin.product_image}</label>
-            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" />
-            {initialData?.image_url && !file && (
-              <div className="mt-2 text-xs text-gray-500">{dict.admin.current_image}</div>
+          {/* ─── Multiple Image Upload Section ─── */}
+          <div className="md:col-span-3">
+            <label className="block text-gray-700 font-medium mb-3">
+              {dict.admin.product_images || 'Product Images'}
+              <span className="text-gray-400 font-normal ml-2 text-xs">
+                ({totalImages} {dict.admin.images_count || 'image(s)'})
+              </span>
+            </label>
+
+            {/* Existing images */}
+            {existingImages.length > 0 && (
+              <div className="mb-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                  {dict.admin.current_images || 'Current Images'}
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                  {existingImages.map((url, index) => (
+                    <div
+                      key={`existing-${index}`}
+                      draggable
+                      onDragStart={() => handleDragStartExisting(index)}
+                      onDragOver={(e) => handleDragOverExisting(e, index)}
+                      onDrop={() => handleDropExisting(index)}
+                      onDragEnd={handleDragEnd}
+                      className={`relative group aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-grab active:cursor-grabbing ${
+                        dragType.current === 'existing' && dragOverIndex === index
+                          ? 'border-primary scale-105 shadow-lg'
+                          : index === 0
+                          ? 'border-primary/40 ring-2 ring-primary/20'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <img src={url} alt="" className="w-full h-full object-cover" />
+                      
+                      {/* Primary badge */}
+                      {index === 0 && (
+                        <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-primary text-white text-[8px] font-black uppercase tracking-wider rounded-md shadow">
+                          {dict.admin.primary || 'Primary'}
+                        </div>
+                      )}
+
+                      {/* Overlay controls */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <div className="flex items-center gap-1">
+                          <div className="p-1 bg-white/90 rounded-md">
+                            <GripVertical className="w-3.5 h-3.5 text-gray-600" />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className="p-1 bg-red-500 rounded-md hover:bg-red-600 transition-colors cursor-pointer"
+                          >
+                            <X className="w-3.5 h-3.5 text-white" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
+
+            {/* New files to upload */}
+            {newFiles.length > 0 && (
+              <div className="mb-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                  {dict.admin.new_images || 'New Images to Upload'}
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                  {newFilePreviews.map((preview, index) => (
+                    <div
+                      key={`new-${index}`}
+                      draggable
+                      onDragStart={() => handleDragStartNew(index)}
+                      onDragOver={(e) => handleDragOverNew(e, index)}
+                      onDrop={() => handleDropNew(index)}
+                      onDragEnd={handleDragEnd}
+                      className={`relative group aspect-square rounded-xl overflow-hidden border-2 border-dashed transition-all duration-200 cursor-grab active:cursor-grabbing ${
+                        dragType.current === 'new' && dragOverIndex === index
+                          ? 'border-primary scale-105 shadow-lg'
+                          : 'border-blue-300 hover:border-blue-400'
+                      }`}
+                    >
+                      <img src={preview} alt="" className="w-full h-full object-cover" />
+
+                      {/* "NEW" badge */}
+                      <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-blue-500 text-white text-[8px] font-black uppercase tracking-wider rounded-md shadow">
+                        {dict.admin.new_badge || 'New'}
+                      </div>
+
+                      {/* Overlay controls */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <div className="flex items-center gap-1">
+                          <div className="p-1 bg-white/90 rounded-md">
+                            <GripVertical className="w-3.5 h-3.5 text-gray-600" />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeNewFile(index)}
+                            className="p-1 bg-red-500 rounded-md hover:bg-red-600 transition-colors cursor-pointer"
+                          >
+                            <X className="w-3.5 h-3.5 text-white" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Add images button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full py-6 border-2 border-dashed border-gray-300 rounded-xl hover:border-primary hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center gap-2 cursor-pointer group"
+            >
+              <ImagePlus className="w-8 h-8 text-gray-400 group-hover:text-primary transition-colors" />
+              <span className="text-sm font-medium text-gray-500 group-hover:text-primary transition-colors">
+                {dict.admin.add_images || 'Click to add images'}
+              </span>
+              <span className="text-[10px] text-gray-400">
+                {dict.admin.drag_to_reorder || 'Drag to reorder • First image is the cover'}
+              </span>
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileSelect}
+              className="hidden"
+            />
           </div>
         </div>
 

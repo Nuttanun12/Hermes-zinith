@@ -1,7 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { ArrowLeft, Mail, MapPin, Phone, Package, ShieldCheck, Zap } from 'lucide-react'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft, Mail, MapPin, Phone, Package, ShieldCheck, Zap, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ProductDetailClient({
@@ -24,6 +25,28 @@ export default function ProductDetailClient({
 
   const title = getLocalizedField('title')
   const description = getLocalizedField('description')
+
+  // Build images array — prefer image_urls, fallback to image_url
+  const images: string[] = (() => {
+    if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+      return product.image_urls
+    }
+    if (product.image_url) {
+      return [product.image_url]
+    }
+    return []
+  })()
+
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const hasMultipleImages = images.length > 1
+
+  const goToPrev = () => {
+    setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+  }
+
+  const goToNext = () => {
+    setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+  }
 
   return (
     <div className="pt-32 pb-24">
@@ -51,13 +74,21 @@ export default function ProductDetailClient({
             transition={{ duration: 0.6 }}
             className="sticky top-32"
           >
+            {/* Main Image */}
             <div className="relative aspect-square rounded-[3rem] overflow-hidden bg-gray-50 border border-gray-100 shadow-2xl group ring-1 ring-black/5">
-              {product.image_url ? (
-                <img 
-                  src={product.image_url} 
-                  alt={title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" 
-                />
+              {images.length > 0 ? (
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={selectedIndex}
+                    src={images[selectedIndex]}
+                    alt={`${title} - ${selectedIndex + 1}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+                  />
+                </AnimatePresence>
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center opacity-10">
                    <Package className="w-32 h-32" />
@@ -71,7 +102,58 @@ export default function ProductDetailClient({
                   {product.category || dict.products.industrial}
                 </span>
               </div>
+
+              {/* Navigation Arrows (only when multiple images) */}
+              {hasMultipleImages && (
+                <>
+                  <button
+                    onClick={goToPrev}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg border border-white/50 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 cursor-pointer"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    onClick={goToNext}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg border border-white/50 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 cursor-pointer"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                  </button>
+
+                  {/* Image counter pill */}
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-black/50 backdrop-blur-md rounded-full text-white text-xs font-bold tracking-wider">
+                    {selectedIndex + 1} / {images.length}
+                  </div>
+                </>
+              )}
             </div>
+
+            {/* Thumbnail Strip */}
+            {hasMultipleImages && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="mt-6 flex gap-3 overflow-x-auto pb-2 scrollbar-hide"
+              >
+                {images.map((url, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedIndex(index)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-300 cursor-pointer ${
+                      selectedIndex === index
+                        ? 'border-primary ring-2 ring-primary/30 shadow-lg scale-105'
+                        : 'border-gray-200 hover:border-gray-300 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={url}
+                      alt={`${title} thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Product Information */}

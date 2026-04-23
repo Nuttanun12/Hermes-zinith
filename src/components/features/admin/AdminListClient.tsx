@@ -60,11 +60,22 @@ export default function AdminListClient({
           {products.map((product) => (
             <tr key={product.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
-                {product.image_url ? (
-                  <img src={product.image_url} alt="" className="w-12 h-12 object-cover rounded" />
-                ) : (
-                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">{dict.admin.no_img}</div>
-                )}
+                {(() => {
+                  const coverImg = product.image_urls?.[0] || product.image_url
+                  const imgCount = product.image_urls?.length || (product.image_url ? 1 : 0)
+                  return coverImg ? (
+                    <div className="relative inline-block">
+                      <img src={coverImg} alt="" className="w-12 h-12 object-cover rounded" />
+                      {imgCount > 1 && (
+                        <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1">
+                          {imgCount}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">{dict.admin.no_img}</div>
+                  )
+                })()}
               </td>
               <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                 {product.title_en}

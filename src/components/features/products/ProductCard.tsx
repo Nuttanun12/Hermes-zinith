@@ -27,6 +27,16 @@ export function ProductCard({
   const title = getLocalizedField('title')
   const desc = getLocalizedField('description')
 
+  // Prefer first image from image_urls array, fallback to image_url
+  const coverImage = (() => {
+    if (product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0) {
+      return product.image_urls[0]
+    }
+    return product.image_url
+  })()
+
+  const imageCount = product.image_urls?.length || (product.image_url ? 1 : 0)
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xs hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full ring-1 ring-black/5">
       <div className="w-full h-64 bg-gray-50 flex items-center justify-center overflow-hidden relative">
@@ -35,14 +45,22 @@ export function ProductCard({
             {product.category || dict.products.categories.all}
           </span>
         </div>
-        {product.image_url ? (
+        {/* Image count badge */}
+        {imageCount > 1 && (
+          <div className="absolute top-4 right-4 z-10">
+            <span className="px-2 py-1 bg-black/50 backdrop-blur-md text-[10px] font-bold text-white rounded-full">
+              {imageCount} 📷
+            </span>
+          </div>
+        )}
+        {coverImage ? (
           <>
             {/* Skeleton placeholder shown until image loads */}
             {!imageLoaded && (
               <div className="absolute inset-0 bg-gray-100 animate-pulse" />
             )}
             <img 
-              src={product.image_url} 
+              src={coverImage} 
               alt={title || 'Product Image'} 
               loading="lazy"
               decoding="async"
