@@ -5,6 +5,7 @@
     "products": "ผลิตภัณฑ์ของเรา",
     "services": "บริการ",
     "contact": "ติดต่อเรา",
+    "team": "ทีมงานของเรา",
     "admin": "ดูแลระบบ"
   },
   "home": {
@@ -217,5 +218,29 @@
     "lang_zh": "ภาษาจีน",
     "error_adding_category": "เกิดข้อผิดพลาดในการเพิ่มหมวดหมู่",
     "error_deleting_category": "เกิดข้อผิดพลาดในการลบหมวดหมู่"
+  },
+  "team": {
+    "title": "ทีมงานมืออาชีพของเรา",
+    "subtitle": "พบกับผู้เชี่ยวชาญที่อยู่เบื้องหลัง เฮอร์มีส ซีนิท",
+    "student_id": "รหัสนักศึกษา",
+    "role": "บทบาท",
+    "members": {
+      "6788008": {
+        "name": "Nattaphat Arayathamrat",
+        "role": "Web design and wireframe"
+      },
+      "6788009": {
+        "name": "Mathurada Chai-aue",
+        "role": "Web design and wireframe"
+      },
+      "6788031": {
+        "name": "Nattanun Jumparuang",
+        "role": "Developer"
+      },
+      "6788060": {
+        "name": "Pamika Auepattanapong",
+        "role": "Report writer"
+      }
+    }
   }
 }
