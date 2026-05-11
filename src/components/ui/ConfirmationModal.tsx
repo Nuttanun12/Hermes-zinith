@@ -64,12 +64,14 @@ export function ConfirmationModal({
             {/* Actions */}
             <div className="p-10 pt-0 flex flex-col sm:flex-row gap-4">
               <button
+                type="button"
                 onClick={onClose}
                 className="flex-1 px-8 py-4 bg-gray-50 text-gray-600 text-xs font-black rounded-2xl hover:bg-gray-100 transition-all tracking-widest uppercase cursor-pointer"
               >
                 {cancelText}
               </button>
               <button
+                type="button"
                 onClick={() => {
                   onConfirm()
                   onClose()
@@ -86,6 +88,7 @@ export function ConfirmationModal({
 
             {/* Close Button (Top right) */}
             <button
+              type="button"
               onClick={onClose}
               className="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 transition-colors cursor-pointer"
             >

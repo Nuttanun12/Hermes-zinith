@@ -163,7 +163,7 @@ export default function AdminListClient({
   return (
     <div className="space-y-8">
       {/* Categories Toggle */}
-      <div className="flex justify-end">
+      <div className="flex">
         <button
           onClick={() => setShowCategories(!showCategories)}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-600 text-xs font-black rounded-2xl hover:bg-gray-200 transition-all tracking-widest uppercase cursor-pointer"

@@ -286,7 +286,7 @@ export default function ProductFormClient({
           </div>
         </div>
 
-        <div className="md:w-1/2 space-y-4 mt-8 border-t pt-8">
+        <div className="space-y-4 mt-8 border-t pt-8">
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="block text-gray-700 font-medium">{dict.admin.category}</label>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Trash2, Edit, Check, X, Tag, Plus, Loader2 } from 'lucide-react'
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal'
 
 export function CategoryManager({
   dict,
@@ -20,6 +21,8 @@ export function CategoryManager({
   const [editForm, setEditForm] = useState({ slug: '', name_en: '', name_th: '', name_zh: '' })
   const [newCat, setNewCat] = useState({ slug: '', name_en: '', name_th: '', name_zh: '' })
   const [showAdd, setShowAdd] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [categoryToDelete, setCategoryToDelete] = useState<{ id: string, slug: string } | null>(null)
 
   const supabase = createClient()
 
@@ -36,8 +39,8 @@ export function CategoryManager({
     setLoading(false)
   }
 
-  const handleAddCategory = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleAddCategory = async (e?: React.FormEvent | React.KeyboardEvent) => {
+    if (e) e.preventDefault()
     if (!newCat.slug || !newCat.name_en) return
     
     setSaving('new')
@@ -97,7 +100,13 @@ export function CategoryManager({
   }
 
   const handleDeleteCategory = async (id: string, slug: string) => {
-    if (!confirm(dict.admin.delete_confirm_msg)) return
+    setCategoryToDelete({ id, slug })
+    setIsDeleteModalOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!categoryToDelete) return
+    const { id, slug } = categoryToDelete
 
     const { error } = await supabase.from('categories').delete().eq('id', id)
     if (!error) {
@@ -106,6 +115,7 @@ export function CategoryManager({
     } else {
       alert(dict.admin.error_deleting_category + ': ' + error.message)
     }
+    setCategoryToDelete(null)
   }
 
   if (loading) {
@@ -126,6 +136,7 @@ export function CategoryManager({
           </h3>
         </div>
         <button
+          type="button"
           onClick={() => setShowAdd(!showAdd)}
           className="p-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-all cursor-pointer"
         >
@@ -134,12 +145,13 @@ export function CategoryManager({
       </div>
 
       {showAdd && (
-        <form onSubmit={handleAddCategory} className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           <input
             placeholder={dict.admin.category_slug_placeholder}
             className="p-2 border rounded-lg text-xs border-gray-200 focus:ring-primary focus:border-primary text-black"
             value={newCat.slug}
             onChange={(e) => setNewCat({ ...newCat, slug: e.target.value })}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddCategory(e)}
             required
           />
           <input
@@ -147,6 +159,7 @@ export function CategoryManager({
             className="p-2 border rounded-lg text-xs border-gray-200 focus:ring-primary focus:border-primary text-black"
             value={newCat.name_en}
             onChange={(e) => setNewCat({ ...newCat, name_en: e.target.value })}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddCategory(e)}
             required
           />
           <input
@@ -154,22 +167,25 @@ export function CategoryManager({
             className="p-2 border rounded-lg text-xs border-gray-200 focus:ring-primary focus:border-primary text-black"
             value={newCat.name_th}
             onChange={(e) => setNewCat({ ...newCat, name_th: e.target.value })}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddCategory(e)}
           />
           <input
             placeholder={dict.admin.category_name_zh_placeholder}
             className="p-2 border rounded-lg text-xs border-gray-200 focus:ring-primary focus:border-primary text-black"
             value={newCat.name_zh}
             onChange={(e) => setNewCat({ ...newCat, name_zh: e.target.value })}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddCategory(e)}
           />
           <button
-            type="submit"
+            type="button"
+            onClick={() => handleAddCategory()}
             disabled={saving === 'new'}
             className="bg-gray-900 text-white rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-2 py-2 cursor-pointer"
           >
             {saving === 'new' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
             {dict.admin.add_category_btn}
           </button>
-        </form>
+        </div>
       )}
 
       <div className="space-y-3">
@@ -234,6 +250,7 @@ export function CategoryManager({
               {editingId === cat.id ? (
                 <>
                   <button
+                    type="button"
                     onClick={() => handleUpdateCategory(cat.id, cat.slug)}
                     disabled={saving === cat.id}
                     className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all cursor-pointer"
@@ -241,6 +258,7 @@ export function CategoryManager({
                     {saving === cat.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                   </button>
                   <button
+                    type="button"
                     onClick={() => setEditingId(null)}
                     className="p-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 transition-all cursor-pointer"
                   >
@@ -250,12 +268,14 @@ export function CategoryManager({
               ) : (
                 <>
                   <button
+                    type="button"
                     onClick={() => startEdit(cat)}
                     className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all cursor-pointer"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteCategory(cat.id, cat.slug)}
                     className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
                   >
@@ -273,6 +293,20 @@ export function CategoryManager({
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false)
+          setCategoryToDelete(null)
+        }}
+        onConfirm={confirmDelete}
+        title={dict.admin.confirm_delete}
+        message={dict.admin.delete_confirm_msg}
+        confirmText={dict.admin.confirm}
+        cancelText={dict.admin.cancel}
+        isDangerous={true}
+      />
     </div>
   )
 }
