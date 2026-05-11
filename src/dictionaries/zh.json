@@ -5,6 +5,7 @@
     "products": "我们的产品",
     "services": "服务",
     "contact": "联系我们",
+    "team": "我们的团队",
     "admin": "管理员"
   },
   "home": {
@@ -217,5 +218,29 @@
     "lang_zh": "中文",
     "error_adding_category": "添加类别时出错",
     "error_deleting_category": "删除类别时出错"
+  },
+  "team": {
+    "title": "我们的专业团队",
+    "subtitle": "见见 Hermes-Zenith 背后的敬业专家",
+    "student_id": "学号",
+    "role": "角色",
+    "members": {
+      "6788008": {
+        "name": "Nattaphat Arayathamrat",
+        "role": "Web design and wireframe"
+      },
+      "6788009": {
+        "name": "Mathurada Chai-aue",
+        "role": "Web design and wireframe"
+      },
+      "6788031": {
+        "name": "Nattanun Jumparuang",
+        "role": "Developer"
+      },
+      "6788060": {
+        "name": "Pamika Auepattanapong",
+        "role": "Report writer"
+      }
+    }
   }
 }

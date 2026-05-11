@@ -5,6 +5,7 @@
     "products": "Products",
     "services": "Services",
     "contact": "Contact Us",
+    "team": "Our Team",
     "admin": "Admin"
   },
   "home": {
@@ -217,5 +218,29 @@
     "lang_zh": "Chinese",
     "error_adding_category": "Error adding category",
     "error_deleting_category": "Error deleting category"
+  },
+  "team": {
+    "title": "Our Professional Team",
+    "subtitle": "Meet the dedicated experts behind Hermes-Zenith",
+    "student_id": "Student ID",
+    "role": "Role",
+    "members": {
+      "6788008": {
+        "name": "Nattaphat Arayathamrat",
+        "role": "Web design and wireframe"
+      },
+      "6788009": {
+        "name": "Mathurada Chai-aue",
+        "role": "Web design and wireframe"
+      },
+      "6788031": {
+        "name": "Nattanun Jumparuang",
+        "role": "Developer"
+      },
+      "6788060": {
+        "name": "Pamika Auepattanapong",
+        "role": "Report writer"
+      }
+    }
   }
 }

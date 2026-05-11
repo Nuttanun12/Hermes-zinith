@@ -7,7 +7,9 @@
 
 ## 🌐 Live Preview
 
-Access the site at `http://localhost:3000` after running the development server. The app auto-redirects to the best-matched locale (`/en`, `/th`, or `/zh`) based on the browser's `Accept-Language` header.
+**Website:** [hermes-zenith.com](https://hermes-zenith.com)
+
+Access the site locally at `http://localhost:3000` after running the development server. The app auto-redirects to the best-matched locale (`/en`, `/th`, or `/zh`) based on the browser's `Accept-Language` header.
 
 ---
 

@@ -86,7 +86,7 @@ export function ProductCard({
           {desc}
         </p>
         <Link
-          href={`/${lang}/bar/${product.id}`}
+          href={`/${lang}/product/${product.id}`}
           className="mt-auto px-6 py-3 bg-white border-2 border-primary/20 text-primary hover:bg-primary hover:text-white hover:border-primary font-bold rounded-xl transition-all duration-300 text-xs w-full uppercase tracking-widest shadow-xs group-hover:shadow-md active:scale-95 text-center inline-block"
         >
           {dict.products.view_details}
