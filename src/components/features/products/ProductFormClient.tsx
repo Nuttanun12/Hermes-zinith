@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { v4 as uuidv4 } from 'uuid'
-import { Plus, Trash2, Tag, ChevronDown, ChevronUp, GripVertical, X, ImagePlus } from 'lucide-react'
+import { Plus, Trash2, Tag, ChevronDown, ChevronUp, GripVertical, X, ImagePlus, Loader2 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal'
+import { CategoryManager } from '@/components/features/admin/CategoryManager'
 
 export default function ProductFormClient({
   initialData,
@@ -46,9 +47,7 @@ export default function ProductFormClient({
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<any[]>([])
   const [showCategoryManager, setShowCategoryManager] = useState(false)
-  const [newCat, setNewCat] = useState({ slug: '', name_en: '', name_th: '', name_zh: '' })
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null)
 
   // Drag state for reordering
   const [dragIndex, setDragIndex] = useState<number | null>(null)
@@ -84,35 +83,6 @@ export default function ProductFormClient({
     }
   }
 
-  const handleAddCategory = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newCat.slug || !newCat.name_en) return
-    
-    const { error } = await supabase.from('categories').insert([newCat])
-    if (!error) {
-      setNewCat({ slug: '', name_en: '', name_th: '', name_zh: '' })
-      fetchCategories()
-    } else {
-      alert(dict.admin.error_adding_category + ': ' + error.message)
-    }
-  }
-
-  const handleDeleteCategory = (slug: string) => {
-    setCategoryToDelete(slug)
-    setIsDeleteModalOpen(true)
-  }
-
-  const confirmDeleteCategory = async () => {
-    if (!categoryToDelete) return
-    
-    const { error } = await supabase.from('categories').delete().eq('slug', categoryToDelete)
-    if (!error) {
-      fetchCategories()
-    } else {
-      alert(dict.admin.error_deleting_category + ': ' + error.message)
-    }
-    setCategoryToDelete(null)
-  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -331,58 +301,12 @@ export default function ProductFormClient({
             </div>
 
             {showCategoryManager && (
-              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-4 space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((cat) => (
-                    <div key={cat.id} className="flex items-center bg-white px-3 py-1 rounded-full border border-gray-100 text-[10px] font-bold text-gray-600">
-                      {cat[`name_${lang}`] || cat.name_en}
-                      <button 
-                        type="button"
-                        onClick={() => handleDeleteCategory(cat.slug)}
-                        className="ml-2 text-red-400 hover:text-red-600 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="border-t border-gray-200 pt-4">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">{dict.admin.add_new_category}</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    <input 
-                      placeholder={dict.admin.category_slug_placeholder} 
-                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
-                      value={newCat.slug}
-                      onChange={(e) => setNewCat({...newCat, slug: e.target.value})}
-                    />
-                    <input 
-                      placeholder={dict.admin.category_name_en_placeholder} 
-                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
-                      value={newCat.name_en}
-                      onChange={(e) => setNewCat({...newCat, name_en: e.target.value})}
-                    />
-                    <input 
-                      placeholder={dict.admin.category_name_th_placeholder} 
-                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
-                      value={newCat.name_th}
-                      onChange={(e) => setNewCat({...newCat, name_th: e.target.value})}
-                    />
-                    <input 
-                      placeholder={dict.admin.category_name_zh_placeholder} 
-                      className="p-2 border rounded text-[10px] w-full border-gray-300 focus:ring-primary focus:border-primary text-black placeholder:text-gray-400" 
-                      value={newCat.name_zh}
-                      onChange={(e) => setNewCat({...newCat, name_zh: e.target.value})}
-                    />
-                  </div>
-                  <button 
-                    type="button"
-                    onClick={handleAddCategory}
-                    className="mt-3 w-full py-2 bg-gray-900 text-white rounded text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-colors cursor-pointer"
-                  >
-                    {dict.admin.add_category_btn}
-                  </button>
-                </div>
+              <div className="mb-4">
+                <CategoryManager 
+                  dict={dict} 
+                  lang={lang} 
+                  onCategoriesChange={fetchCategories} 
+                />
               </div>
             )}
 
@@ -550,16 +474,6 @@ export default function ProductFormClient({
         </button>
       </form>
 
-      <ConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDeleteCategory}
-        title={dict.admin.confirm_delete}
-        message={dict.admin.delete_confirm_msg}
-        confirmText={dict.admin.confirm}
-        cancelText={dict.admin.cancel}
-        isDangerous={true}
-      />
     </div>
   )
 }
