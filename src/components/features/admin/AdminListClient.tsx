@@ -118,15 +118,87 @@ export default function AdminListClient({
   const [productToDelete, setProductToDelete] = useState<{ id: string; imageUrl: string } | null>(null)
   const [showCategories, setShowCategories] = useState(false)
   const [isSavingOrder, setIsSavingOrder] = useState(false)
+  const [isDirty, setIsDirty] = useState(false)
+  const [showLeaveModal, setShowLeaveModal] = useState(false)
 
   // Drag state
   const dragIndexRef = useRef<number | null>(null)
   const [dragOver, setDragOver] = useState<number | null>(null)
 
+  // Navigation guard refs
+  const pendingNavRef = useRef<string | null>(null)
+  const originalPushStateRef = useRef<typeof window.history.pushState | null>(null)
+
   const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => { setProducts(initialProducts) }, [initialProducts])
+
+  // ── Navigation guard — block leaving with unsaved order ─────────────────────
+  useEffect(() => {
+    if (!isDirty) return
+
+    // 1. Browser close / refresh / external URL
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+
+    // 2. Next.js Link / router.push intercept
+    const original = window.history.pushState.bind(window.history)
+    originalPushStateRef.current = original
+      ; (window.history as any).pushState = (state: any, title: string, url?: string | URL | null) => {
+        const target = url ? url.toString() : null
+        const current = window.location.pathname + window.location.search
+        if (target && target !== current) {
+          pendingNavRef.current = target
+          // Defer to avoid calling setState inside React's synchronous pushState context
+          setTimeout(() => setShowLeaveModal(true), 0)
+          return // block navigation
+        }
+        original(state, title, url)
+      }
+
+    // 3. Browser back / forward button
+    const onPopState = () => {
+      // Push current URL back to cancel the navigation
+      window.history.pushState(null, '', window.location.href)
+      pendingNavRef.current = null
+      setTimeout(() => setShowLeaveModal(true), 0)
+    }
+    window.addEventListener('popstate', onPopState)
+
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload)
+      window.removeEventListener('popstate', onPopState)
+      if (originalPushStateRef.current) {
+        window.history.pushState = originalPushStateRef.current
+        originalPushStateRef.current = null
+      }
+    }
+  }, [isDirty])
+
+  // Restore pushState and navigate away (user confirmed leave)
+  const confirmLeave = () => {
+    setShowLeaveModal(false)
+    if (originalPushStateRef.current) {
+      window.history.pushState = originalPushStateRef.current
+      originalPushStateRef.current = null
+    }
+    setIsDirty(false)
+    if (pendingNavRef.current) {
+      router.push(pendingNavRef.current)
+    } else {
+      router.back()
+    }
+    pendingNavRef.current = null
+  }
+
+  const cancelLeave = () => {
+    setShowLeaveModal(false)
+    pendingNavRef.current = null
+  }
 
   // ── Drag handlers ───────────────────────────────────────────────────────────
   const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
@@ -141,7 +213,7 @@ export default function AdminListClient({
     if (dragIndexRef.current !== index) setDragOver(index)
   }
 
-  const handleDrop = async (e: React.DragEvent<HTMLTableRowElement>, dropIndex: number) => {
+  const handleDrop = (e: React.DragEvent<HTMLTableRowElement>, dropIndex: number) => {
     e.preventDefault()
     const fromIndex = dragIndexRef.current
     if (fromIndex === null || fromIndex === dropIndex) {
@@ -150,30 +222,35 @@ export default function AdminListClient({
       return
     }
 
-    // Reorder locally
+    // Reorder locally only — no DB write yet
     const reordered = [...products]
     const [moved] = reordered.splice(fromIndex, 1)
     reordered.splice(dropIndex, 0, moved)
 
-    // Assign priority = 1, 2, 3 … based on new visual order
-    const updated = reordered.map((p, i) => ({ ...p, priority: i + 1 }))
-    setProducts(updated)
+    setProducts(reordered)
+    setIsDirty(true)
     setDragOver(null)
     dragIndexRef.current = null
+  }
 
-    // Persist all priority values in one batch
+  // ── Save order handler ──────────────────────────────────────────────────────
+  const saveOrder = async () => {
     setIsSavingOrder(true)
+    // Assign priority = 1, 2, 3 … based on current visual order
+    const withPriority = products.map((p, i) => ({ ...p, priority: i + 1 }))
     try {
       await Promise.all(
-        updated.map((p) =>
+        withPriority.map((p) =>
           supabase.from('products').update({ priority: p.priority }).eq('id', p.id)
         )
       )
+      setProducts(withPriority)
+      setIsDirty(false)
+      router.refresh()
     } catch {
-      // silent — refresh will re-sync
+      alert('Failed to save order. Please try again.')
     } finally {
       setIsSavingOrder(false)
-      router.refresh()
     }
   }
 
@@ -205,7 +282,26 @@ export default function AdminListClient({
   return (
     <div className="space-y-8">
       {/* Categories Toggle */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between">
+        {/* Save Order button — shown outside & below the table, right-aligned */}
+        <div className="flex items-center justify-start gap-3">
+          <button
+            onClick={saveOrder}
+            disabled={!isDirty || isSavingOrder}
+            className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white text-xs font-black rounded-2xl uppercase tracking-widest shadow-lg shadow-primary/20 transition-all duration-300 hover:bg-primary-dark hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer"
+            >
+            {isSavingOrder ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Saving…</>
+            ) : (
+              <>Save Order</>
+            )}
+          </button>
+            {isDirty && !isSavingOrder && (
+              <span className="text-xs text-amber-600 font-semibold bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl">
+                Unsaved changes
+              </span>
+            )}
+        </div>
         <button
           onClick={() => setShowCategories(!showCategories)}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-600 text-xs font-black rounded-2xl hover:bg-gray-200 transition-all tracking-widest uppercase cursor-pointer"
@@ -215,12 +311,6 @@ export default function AdminListClient({
           {showCategories ? <ChevronUp className="w-4 h-4 ml-1" /> : <ChevronDown className="w-4 h-4 ml-1" />}
         </button>
 
-        {isSavingOrder && (
-          <span className="flex items-center gap-2 text-xs text-primary font-semibold">
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            Saving order…
-          </span>
-        )}
       </div>
 
       {showCategories && (
@@ -254,11 +344,10 @@ export default function AdminListClient({
                   onDragOver={(e) => handleDragOver(e, index)}
                   onDrop={(e) => handleDrop(e, index)}
                   onDragEnd={handleDragEnd}
-                  className={`transition-all duration-150 ${
-                    isDraggingOver
+                  className={`transition-all duration-150 ${isDraggingOver
                       ? 'bg-primary/5 border-t-2 border-primary shadow-inner'
                       : 'hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   {/* Drag handle */}
                   <td className="px-3 py-4 text-center">
@@ -358,6 +447,18 @@ export default function AdminListClient({
         message={dict.admin.delete_confirm_msg}
         confirmText={dict.admin.confirm_delete}
         cancelText={dict.admin.keep_product}
+        isDangerous={true}
+      />
+
+      {/* Leave without saving modal */}
+      <ConfirmationModal
+        isOpen={showLeaveModal}
+        onClose={cancelLeave}
+        onConfirm={confirmLeave}
+        title="Unsaved Order Changes"
+        message="You have unsaved changes to the product order. If you leave now, your changes will be lost."
+        confirmText="Leave without saving"
+        cancelText="Stay & save"
         isDangerous={true}
       />
     </div>
