@@ -3,7 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { Trash2, Edit, Pencil, Check, Loader2, Tag, ChevronDown, ChevronUp } from 'lucide-react'
+import {
+  Trash2, Edit, Pencil, Check, Loader2, Tag,
+  ChevronDown, ChevronUp, GripVertical,
+} from 'lucide-react'
 import Link from 'next/link'
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal'
 import { CategoryManager } from './CategoryManager'
@@ -27,7 +30,6 @@ function CategoryCell({
   const selectRef = useRef<HTMLSelectElement>(null)
   const supabase = createClient()
 
-  // Fetch categories once when editing begins
   useEffect(() => {
     if (!editing) return
     supabase
@@ -36,28 +38,17 @@ function CategoryCell({
       .order('name_en')
       .then(({ data }) => {
         if (data) setCategories(data)
-        // Focus the select after categories load
         setTimeout(() => selectRef.current?.focus(), 50)
       })
   }, [editing])
 
   const handleSave = async (newValue: string) => {
-    if (newValue === product.category) {
-      setEditing(false)
-      return
-    }
+    if (newValue === product.category) { setEditing(false); return }
     setSaving(true)
     const { error } = await supabase
-      .from('products')
-      .update({ category: newValue })
-      .eq('id', product.id)
+      .from('products').update({ category: newValue }).eq('id', product.id)
     setSaving(false)
-    if (!error) {
-      setValue(newValue)
-      onUpdate(newValue)
-    } else {
-      alert(dict.admin.error_updating)
-    }
+    if (!error) { setValue(newValue); onUpdate(newValue) } else { alert(dict.admin.error_updating) }
     setEditing(false)
   }
 
@@ -74,9 +65,7 @@ function CategoryCell({
         >
           <option value="">{dict.admin.select_category}</option>
           {categories.map((cat) => (
-            <option key={cat.id} value={cat.slug}>
-              {cat[`name_${lang}`] || cat.name_en}
-            </option>
+            <option key={cat.id} value={cat.slug}>{cat[`name_${lang}`] || cat.name_en}</option>
           ))}
           {categories.length === 0 && (
             <>
@@ -87,20 +76,17 @@ function CategoryCell({
             </>
           )}
         </select>
-        {saving ? (
-          <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
-        ) : (
-          <button
-            onMouseDown={(e) => {
-              e.preventDefault() // prevent blur from firing before click
-              handleSave(value)
-            }}
-            className="text-primary hover:text-primary-dark cursor-pointer"
-            title="Save"
-          >
-            <Check className="w-3.5 h-3.5" />
-          </button>
-        )}
+        {saving
+          ? <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
+          : (
+            <button
+              onMouseDown={(e) => { e.preventDefault(); handleSave(value) }}
+              className="text-primary hover:text-primary-dark cursor-pointer"
+              title="Save"
+            >
+              <Check className="w-3.5 h-3.5" />
+            </button>
+          )}
       </div>
     )
   }
@@ -117,6 +103,7 @@ function CategoryCell({
   )
 }
 
+// ── Main component ────────────────────────────────────────────────────────────
 export default function AdminListClient({
   initialProducts,
   dict,
@@ -128,16 +115,74 @@ export default function AdminListClient({
 }) {
   const [products, setProducts] = useState(initialProducts)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [productToDelete, setProductToDelete] = useState<{id: string, imageUrl: string} | null>(null)
+  const [productToDelete, setProductToDelete] = useState<{ id: string; imageUrl: string } | null>(null)
   const [showCategories, setShowCategories] = useState(false)
-  
-  useEffect(() => {
-    setProducts(initialProducts)
-  }, [initialProducts])
-  
+  const [isSavingOrder, setIsSavingOrder] = useState(false)
+
+  // Drag state
+  const dragIndexRef = useRef<number | null>(null)
+  const [dragOver, setDragOver] = useState<number | null>(null)
+
   const supabase = createClient()
   const router = useRouter()
 
+  useEffect(() => { setProducts(initialProducts) }, [initialProducts])
+
+  // ── Drag handlers ───────────────────────────────────────────────────────────
+  const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
+    dragIndexRef.current = index
+    e.dataTransfer.effectAllowed = 'move'
+    // Ghost image: slightly transparent clone (browser default is fine)
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (dragIndexRef.current !== index) setDragOver(index)
+  }
+
+  const handleDrop = async (e: React.DragEvent<HTMLTableRowElement>, dropIndex: number) => {
+    e.preventDefault()
+    const fromIndex = dragIndexRef.current
+    if (fromIndex === null || fromIndex === dropIndex) {
+      setDragOver(null)
+      dragIndexRef.current = null
+      return
+    }
+
+    // Reorder locally
+    const reordered = [...products]
+    const [moved] = reordered.splice(fromIndex, 1)
+    reordered.splice(dropIndex, 0, moved)
+
+    // Assign priority = 1, 2, 3 … based on new visual order
+    const updated = reordered.map((p, i) => ({ ...p, priority: i + 1 }))
+    setProducts(updated)
+    setDragOver(null)
+    dragIndexRef.current = null
+
+    // Persist all priority values in one batch
+    setIsSavingOrder(true)
+    try {
+      await Promise.all(
+        updated.map((p) =>
+          supabase.from('products').update({ priority: p.priority }).eq('id', p.id)
+        )
+      )
+    } catch {
+      // silent — refresh will re-sync
+    } finally {
+      setIsSavingOrder(false)
+      router.refresh()
+    }
+  }
+
+  const handleDragEnd = () => {
+    dragIndexRef.current = null
+    setDragOver(null)
+  }
+
+  // ── Delete handlers ─────────────────────────────────────────────────────────
   const triggerDelete = (id: string, imageUrl: string) => {
     setProductToDelete({ id, imageUrl })
     setIsDeleting(true)
@@ -145,17 +190,14 @@ export default function AdminListClient({
 
   const confirmDelete = async () => {
     if (!productToDelete) return
-    
     const { id } = productToDelete
     const { error } = await supabase.from('products').delete().eq('id', id)
-    
     if (!error) {
-      setProducts(products.filter(p => p.id !== id))
+      setProducts(products.filter((p) => p.id !== id))
       router.refresh()
     } else {
       alert(dict.admin.error_deleting)
     }
-    
     setProductToDelete(null)
     setIsDeleting(false)
   }
@@ -163,7 +205,7 @@ export default function AdminListClient({
   return (
     <div className="space-y-8">
       {/* Categories Toggle */}
-      <div className="flex">
+      <div className="flex items-center gap-4">
         <button
           onClick={() => setShowCategories(!showCategories)}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-600 text-xs font-black rounded-2xl hover:bg-gray-200 transition-all tracking-widest uppercase cursor-pointer"
@@ -172,15 +214,18 @@ export default function AdminListClient({
           {showCategories ? dict.admin.close_manager : dict.admin.manage_categories}
           {showCategories ? <ChevronUp className="w-4 h-4 ml-1" /> : <ChevronDown className="w-4 h-4 ml-1" />}
         </button>
+
+        {isSavingOrder && (
+          <span className="flex items-center gap-2 text-xs text-primary font-semibold">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            Saving order…
+          </span>
+        )}
       </div>
 
       {showCategories && (
         <div className="animate-in fade-in slide-in-from-top-4 duration-300">
-          <CategoryManager 
-            dict={dict} 
-            lang={lang} 
-            onCategoriesChange={() => router.refresh()} 
-          />
+          <CategoryManager dict={dict} lang={lang} onCategoriesChange={() => router.refresh()} />
         </div>
       )}
 
@@ -188,6 +233,10 @@ export default function AdminListClient({
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50 uppercase tracking-wider text-xs font-semibold text-gray-500">
             <tr>
+              {/* Drag handle col */}
+              <th className="px-3 py-3 w-10" />
+              {/* Order badge col */}
+              <th className="px-3 py-3 text-center w-12">#</th>
               <th className="px-6 py-3 text-left">{dict.admin.image}</th>
               <th className="px-6 py-3 text-left">{dict.admin.title_en}</th>
               <th className="px-6 py-3 text-left">{dict.admin.category}</th>
@@ -195,62 +244,104 @@ export default function AdminListClient({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {(() => {
-                    const coverImg = product.image_urls?.[0] || product.image_url
-                    const imgCount = product.image_urls?.length || (product.image_url ? 1 : 0)
-                    return coverImg ? (
-                      <div className="relative inline-block">
-                        <img src={coverImg} alt="" className="w-12 h-12 object-cover rounded" />
-                        {imgCount > 1 && (
-                          <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1">
-                            {imgCount}
-                          </span>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">{dict.admin.no_img}</div>
-                    )
-                  })()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                  {product.title_en}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <CategoryCell
-                    product={product}
-                    dict={dict}
-                    lang={lang}
-                    onUpdate={(newCategory) =>
-                      setProducts((prev) =>
-                        prev.map((p) => p.id === product.id ? { ...p, category: newCategory } : p)
+            {products.map((product, index) => {
+              const isDraggingOver = dragOver === index
+              return (
+                <tr
+                  key={product.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDrop={(e) => handleDrop(e, index)}
+                  onDragEnd={handleDragEnd}
+                  className={`transition-all duration-150 ${
+                    isDraggingOver
+                      ? 'bg-primary/5 border-t-2 border-primary shadow-inner'
+                      : 'hover:bg-gray-50'
+                  }`}
+                >
+                  {/* Drag handle */}
+                  <td className="px-3 py-4 text-center">
+                    <div
+                      className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-gray-300 hover:text-primary hover:bg-primary/10 transition-all cursor-grab active:cursor-grabbing"
+                      title="Drag to reorder"
+                    >
+                      <GripVertical className="w-4 h-4" />
+                    </div>
+                  </td>
+
+                  {/* Priority badge */}
+                  <td className="px-3 py-4 text-center">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-black bg-gray-100 text-gray-400">
+                      {index + 1}
+                    </span>
+                  </td>
+
+                  {/* Image */}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {(() => {
+                      const coverImg = product.image_urls?.[0] || product.image_url
+                      const imgCount = product.image_urls?.length || (product.image_url ? 1 : 0)
+                      return coverImg ? (
+                        <div className="relative inline-block">
+                          <img src={coverImg} alt="" className="w-12 h-12 object-cover rounded" />
+                          {imgCount > 1 && (
+                            <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1">
+                              {imgCount}
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
+                          {dict.admin.no_img}
+                        </div>
                       )
-                    }
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
-                  <Link
-                    href={`/${lang}/admin/edit/${product.id}`}
-                    className="text-primary hover:text-primary-dark mr-4 inline-flex items-center"
-                  >
-                    <Edit className="w-4 h-4 mr-1" />
-                    {dict.admin.edit}
-                  </Link>
-                  <button
-                    onClick={() => triggerDelete(product.id, product.image_url)}
-                    className="text-red-600 hover:text-red-900 inline-flex items-center cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4 mr-1" />
-                    {dict.admin.delete}
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    })()}
+                  </td>
+
+                  {/* Title */}
+                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                    {product.title_en}
+                  </td>
+
+                  {/* Category */}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <CategoryCell
+                      product={product}
+                      dict={dict}
+                      lang={lang}
+                      onUpdate={(newCategory) =>
+                        setProducts((prev) =>
+                          prev.map((p) => p.id === product.id ? { ...p, category: newCategory } : p)
+                        )
+                      }
+                    />
+                  </td>
+
+                  {/* Actions */}
+                  <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
+                    <Link
+                      href={`/${lang}/admin/edit/${product.id}`}
+                      className="text-primary hover:text-primary-dark mr-4 inline-flex items-center"
+                    >
+                      <Edit className="w-4 h-4 mr-1" />
+                      {dict.admin.edit}
+                    </Link>
+                    <button
+                      onClick={() => triggerDelete(product.id, product.image_url)}
+                      className="text-red-600 hover:text-red-900 inline-flex items-center cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4 mr-1" />
+                      {dict.admin.delete}
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
+
             {products.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-6 py-10 text-center text-gray-500">
+                <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
                   {dict.products.no_products}
                 </td>
               </tr>

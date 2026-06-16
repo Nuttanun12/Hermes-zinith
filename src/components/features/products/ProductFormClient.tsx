@@ -26,6 +26,7 @@ export default function ProductFormClient({
     description_th: initialData?.description_th || '',
     description_zh: initialData?.description_zh || '',
     category: initialData?.category || '',
+    priority: initialData?.priority != null ? String(initialData.priority) : '',
   })
 
   // Multiple images support
@@ -197,8 +198,10 @@ export default function ProductFormClient({
     // Combine existing + newly uploaded
     const allImageUrls = [...existingImages, ...uploadedUrls]
 
+    const priorityValue = formData.priority.trim() === '' ? null : parseInt(formData.priority, 10)
     const payload = {
       ...formData,
+      priority: isNaN(priorityValue as number) ? null : priorityValue,
       image_urls: allImageUrls,
       // Keep image_url as the first image for backward compatibility
       image_url: allImageUrls[0] || null,
@@ -287,6 +290,23 @@ export default function ProductFormClient({
         </div>
 
         <div className="space-y-4 mt-8 border-t pt-8">
+          {/* Priority field */}
+          <div className="flex flex-col gap-2">
+            <label className="block text-gray-700 font-medium">
+              Priority
+              <span className="ml-2 text-xs text-gray-400 font-normal">(lower number = shown first; leave blank for no priority)</span>
+            </label>
+            <input
+              type="number"
+              name="priority"
+              value={formData.priority}
+              onChange={handleChange}
+              min={1}
+              placeholder="e.g. 1, 2, 3 …"
+              className="w-40 border-gray-300 rounded focus:ring-primary focus:border-primary p-2 border text-black placeholder:text-gray-400"
+            />
+          </div>
+
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="block text-gray-700 font-medium">{dict.admin.category}</label>

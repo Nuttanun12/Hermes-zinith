@@ -17,6 +17,7 @@ export default async function AdminDashboardPage({
   const { data: products } = await supabase
     .from('products')
     .select('*')
+    .order('priority', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false })
 
   return (

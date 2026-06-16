@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('products')
     .select('*', { count: 'exact' })
+    .order('priority', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false })
 
   // Apply category filter

@@ -23,6 +23,7 @@ export default async function ProductsPage({
     supabase
       .from('products')
       .select('*', { count: 'exact' })
+      .order('priority', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false })
       .range(0, PAGE_SIZE - 1),
     supabase.from('categories').select('*').order('name_en')
