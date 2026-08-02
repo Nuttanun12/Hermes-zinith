@@ -198,10 +198,57 @@ export default function ProductFormClient({
     // Combine existing + newly uploaded
     const allImageUrls = [...existingImages, ...uploadedUrls]
 
-    const priorityValue = formData.priority.trim() === '' ? null : parseInt(formData.priority, 10)
+    let priorityValue = formData.priority.trim() === '' ? null : parseInt(formData.priority, 10)
+    priorityValue = isNaN(priorityValue as number) ? null : priorityValue
+
+    // Workaround for database constraints: if no priority provided, get max + 1
+    if (priorityValue === null) {
+      const { data: maxData, error: maxErr } = await supabase
+        .from('products')
+        .select('priority')
+        .order('priority', { ascending: false })
+        .limit(1)
+        .single()
+      
+      if (!maxErr && maxData) {
+        priorityValue = (maxData.priority || 0) + 1
+      } else {
+        priorityValue = 1
+      }
+    } else {
+      // Shift priorities if the chosen priority is already taken
+      try {
+        let query = supabase
+          .from('products')
+          .select('id, priority')
+          .gte('priority', priorityValue)
+          .order('priority', { ascending: false })
+        
+        if (isEditing) {
+          query = query.neq('id', initialData.id)
+        }
+
+        const { data: toShift, error: fetchErr } = await query
+        
+        if (!fetchErr && toShift) {
+          const hasCollision = toShift.some(p => p.priority === priorityValue)
+          if (hasCollision) {
+            for (const p of toShift) {
+              await supabase
+                .from('products')
+                .update({ priority: p.priority + 1 })
+                .eq('id', p.id)
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error shifting priorities:', err)
+      }
+    }
+
     const payload = {
       ...formData,
-      priority: isNaN(priorityValue as number) ? null : priorityValue,
+      priority: priorityValue,
       image_urls: allImageUrls,
       // Keep image_url as the first image for backward compatibility
       image_url: allImageUrls[0] || null,
@@ -215,7 +262,7 @@ export default function ProductFormClient({
 
       if (error) {
         console.error('Update error:', error)
-        alert(dict.admin.error_updating + ': ' + error.message)
+        alert(`${dict.admin.error_updating}: ${error.message}`)
         setLoading(false)
         return
       }
@@ -226,7 +273,7 @@ export default function ProductFormClient({
 
       if (error) {
         console.error('Insert error:', error)
-        alert(dict.admin.error_inserting + ': ' + error.message)
+        alert(`${dict.admin.error_inserting}: ${error.message}`)
         setLoading(false)
         return
       }
