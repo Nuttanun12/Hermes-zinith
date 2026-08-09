@@ -236,18 +236,43 @@ export default function AdminListClient({
   // ── Save order handler ──────────────────────────────────────────────────────
   const saveOrder = async () => {
     setIsSavingOrder(true)
-    // Assign priority = 1, 2, 3 … based on current visual order
     const withPriority = products.map((p, i) => ({ ...p, priority: i + 1 }))
+    // Large offset ensures the temp range (100001, 100002, …) never overlaps
+    // with the final range (1, 2, 3, …), satisfying both NOT NULL and UNIQUE.
+    const OFFSET = 100000
     try {
-      await Promise.all(
+      // Phase 1 — shift everyone into a safe temp range so the unique
+      // constraint is never violated when values cross during reassignment.
+      const shiftResults = await Promise.all(
+        products.map((p, i) =>
+          supabase.from('products').update({ priority: i + 1 + OFFSET }).eq('id', p.id)
+        )
+      )
+      const shiftErrors = shiftResults.filter((r) => r.error)
+      if (shiftErrors.length > 0) {
+        console.error('Priority shift errors:', shiftErrors.map((r) => r.error))
+        alert('Failed to save order (phase 1). Please try again.')
+        return
+      }
+
+      // Phase 2 — assign the real sequential values 1, 2, 3 …
+      const setResults = await Promise.all(
         withPriority.map((p) =>
           supabase.from('products').update({ priority: p.priority }).eq('id', p.id)
         )
       )
+      const setErrors = setResults.filter((r) => r.error)
+      if (setErrors.length > 0) {
+        console.error('Priority set errors:', setErrors.map((r) => r.error))
+        alert(`Failed to save order for ${setErrors.length} product(s). Please try again.`)
+        return
+      }
+
       setProducts(withPriority)
       setIsDirty(false)
       router.refresh()
-    } catch {
+    } catch (err) {
+      console.error('saveOrder unexpected error:', err)
       alert('Failed to save order. Please try again.')
     } finally {
       setIsSavingOrder(false)
